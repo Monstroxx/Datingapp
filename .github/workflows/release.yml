@@ -1,8 +1,9 @@
 name: Build and Release WPF Application
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - 'v*.*.*'
   workflow_dispatch:
 
 jobs:
@@ -32,16 +33,11 @@ jobs:
         cd publish
         Compress-Archive -Path * -DestinationPath ../BananaLove-${{ github.ref_name }}-win-x64.zip
 
-    - name: Upload ZIP to Release
+    - name: Create Release with Assets
       uses: softprops/action-gh-release@v2
       with:
-        files: BananaLove-${{ github.ref_name }}-win-x64.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Upload EXE to Release
-      uses: softprops/action-gh-release@v2
-      with:
-        files: publish/BananaLove.exe
+        files: |
+          BananaLove-${{ github.ref_name }}-win-x64.zip
+          publish/BananaLove.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
