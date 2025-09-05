@@ -13,9 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Images\" />
     <Folder Include="Model\" />
     <Folder Include="ViewModel\" />
+	  <Resource Include="Images"/>
   </ItemGroup>
 
 </Project>
