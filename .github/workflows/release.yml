@@ -1,20 +1,17 @@
 name: Build and Release WPF Application
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'
+  release:
+    types: [published]
   workflow_dispatch:
 
 jobs:
   build-and-release:
     runs-on: windows-latest
-    
+
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -35,11 +32,16 @@ jobs:
         cd publish
         Compress-Archive -Path * -DestinationPath ../BananaLove-${{ github.ref_name }}-win-x64.zip
 
-    - name: Create Release with Assets
+    - name: Upload ZIP to Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: BananaLove-${{ github.ref_name }}-win-x64.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        gh release create ${{ github.ref_name }} `
-          ./BananaLove-${{ github.ref_name }}-win-x64.zip `
-          --title "BananaLove ${{ github.ref_name }}" `
-          --notes "Release ${{ github.ref_name }} of BananaLove Dating App"
+
+    - name: Upload EXE to Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: publish/BananaLove.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
