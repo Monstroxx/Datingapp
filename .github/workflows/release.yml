@@ -39,4 +39,4 @@ jobs:
         files: |
           BananaLove-${{ github.ref_name }}-win-x64.zip
           publish/BananaLove.exe
-        token: ${{ secrets.GH_PAT }}}
+        token: ${{ secrets.GH_PAT }}
