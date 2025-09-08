@@ -3,3 +3,6 @@ Youtube Playlist: https://youtube.com/playlist?list=PLPH9CV_FVGRT9hytPN_tDWSp0kE
 
 ## assets:
 https://screamingbrainstudios.itch.io/seamless-space-backgrounds 
+
+## Installer
+https://jrsoftware.org/ishelp/
