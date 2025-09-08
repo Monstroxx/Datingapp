@@ -13,14 +13,15 @@
         AllowsTransparency="True"
         MouseDown="Window_MouseDown"
         >
-    <Border CornerRadius="50">
+    <Border CornerRadius="12">
         <Border.Background>
             <ImageBrush ImageSource="/Images/nebula.png"
                         Stretch="None"/>
         </Border.Background>
-    <Border CornerRadius="50"
-            BorderThickness="5"
-            Opacity="0.7"
+        
+    <Border CornerRadius="10"
+            BorderThickness="1"
+            Opacity="0.8"
             >
         <Border.BorderBrush>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -37,6 +38,44 @@
             </LinearGradientBrush>
         </Border.Background>
 
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30">
+                            
+                    </RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="5"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="LOG IN"
+                               Foreground="DarkGray"
+                               FontSize="25"
+                               FontFamily="Montserrat"
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Margin="10,0,0,0"/>
+
+                    <Button x:Name="btnMinnimize"
+                            Background="#28AEED"
+                            BorderThickness="0"
+                            Content="-"
+                            Foreground="White"
+                            FontSize="16"
+                            FontFamily="Montserrat"
+                            Cursor="Hand"
+                            Grid.Column="1"
+                            Click="btnMinnimize_Click">
+                        
+                    </Button>
+
+                </Grid>
+            </Grid>
     </Border>
     </Border>
 

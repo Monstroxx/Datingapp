@@ -29,5 +29,10 @@ namespace BananaLove.View
             if (e.LeftButton == MouseButtonState.Pressed)
                 DragMove();
         }
+
+        private void btnMinnimize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
     }
 }
