@@ -18,30 +18,30 @@
             <ImageBrush ImageSource="/Images/nebula.png"
                         Stretch="None"/>
         </Border.Background>
-        
-    <Border CornerRadius="10"
+
+        <Border CornerRadius="10"
             BorderThickness="1"
             Opacity="0.8"
             >
-        <Border.BorderBrush>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#462AD8" Offset="0" />
-                <GradientStop Color="#DA34AE" Offset="0.75" />
-                <GradientStop Color="#8A16C1" Offset="1" />
-            </LinearGradientBrush>
-        </Border.BorderBrush>
-        
-        <Border.Background>
-            <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
-                <GradientStop Color="#060531" Offset="0" />
-                <GradientStop Color="#1B1448" Offset="0.75" />
-            </LinearGradientBrush>
-        </Border.Background>
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#462AD8" Offset="0" />
+                    <GradientStop Color="#DA34AE" Offset="0.75" />
+                    <GradientStop Color="#8A16C1" Offset="1" />
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
+                    <GradientStop Color="#060531" Offset="0" />
+                    <GradientStop Color="#1B1448" Offset="0.75" />
+                </LinearGradientBrush>
+            </Border.Background>
 
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30">
-                            
+
                     </RowDefinition>
                 </Grid.RowDefinitions>
 
@@ -92,7 +92,7 @@
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>
-                        
+
                     </Button>
 
                     <Button x:Name="btnClose"
@@ -126,12 +126,22 @@
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>
-
                     </Button>
-
                 </Grid>
+
+                <StackPanel Width="250"
+                            Orientation="Vertical"
+                            Margin="274,35,274,-102">
+
+                    <Image Source="/Images/BannanaLove.png"
+                           Width="100" Height="100"/>
+
+                    <TextBlock Text="BannaLove"/>
+
+                </StackPanel>
+
             </Grid>
-    </Border>
+        </Border>
     </Border>
 
 </Window>
