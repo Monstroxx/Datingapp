@@ -15,7 +15,7 @@
   <ItemGroup>
     <Folder Include="Model\" />
     <Folder Include="ViewModel\" />
-	  <Resource Include="Images\nebula.png"/>
+	  <Resource Include="Images\**\*" />
   </ItemGroup>
 
 </Project>

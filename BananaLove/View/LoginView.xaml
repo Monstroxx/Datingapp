@@ -131,13 +131,148 @@
 
                 <StackPanel Width="250"
                             Orientation="Vertical"
-                            Margin="274,35,274,-102">
+                            Margin="274,35,274,-518">
 
                     <Image Source="/Images/BannanaLove.png"
                            Width="100" Height="100"/>
 
-                    <TextBlock Text="BannaLove"/>
+                    <TextBlock
+                        Text="Username"
+                        Foreground="DarkGray"
+                        FontSize="12"
+                        FontWeight="Medium"
+                        FontFamily="Montserrat"
+                        Margin="0,35,0,0"/>
 
+                    <TextBox x:Name="txtUser"
+                             FontSize="13"
+                             FontWeight="Medium"
+                             FontFamily="Montserrat"
+                             Foreground="White"
+                             CaretBrush="LightGray"
+                             BorderBrush="DarkGray"
+                             BorderThickness="0,0,0,1"
+                             Height="28"
+                             VerticalContentAlignment="Center"
+                             Margin="0,5,0,0"
+                             Padding="25,0,0,0">
+                        <TextBox.Background>
+                            <ImageBrush ImageSource="/Images/icons8-benutzer-48.png"
+                                        Stretch="Uniform"
+                                        AlignmentX="Left"
+                                        />
+                        </TextBox.Background>
+                    </TextBox>
+
+                    <TextBlock
+                        Text="Password"
+                        Foreground="DarkGray"
+                        FontSize="12"
+                        FontWeight="Medium"
+                        FontFamily="Montserrat"
+                        Margin="0,15,0,0"/>
+
+                    <PasswordBox x:Name="txtPass"
+                             FontSize="13"
+                             FontWeight="Medium"
+                             FontFamily="Montserrat"
+                             Foreground="White"
+                             CaretBrush="LightGray"
+                             BorderBrush="DarkGray"
+                             BorderThickness="0,0,0,1"
+                             Height="28"
+                             VerticalContentAlignment="Center"
+                             Margin="0,5,0,0"
+                             Padding="25,0,0,0">
+                        <PasswordBox.Background>
+                            <ImageBrush ImageSource="/Images/icons8-passwort-1-48.png"
+                                        Stretch="Uniform"
+                                        AlignmentX="Left"
+                                        />
+                        </PasswordBox.Background>
+                    </PasswordBox>
+                    
+                    <TextBlock
+                        Text="E-Mail"
+                        Foreground="DarkGray"
+                        FontSize="12"
+                        FontWeight="Medium"
+                        FontFamily="Montserrat"
+                        Margin="0,15,0,0"/>
+
+                    <TextBox x:Name="txtMail"
+                             FontSize="13"
+                             FontWeight="Medium"
+                             FontFamily="Montserrat"
+                             Foreground="White"
+                             CaretBrush="LightGray"
+                             BorderBrush="DarkGray"
+                             BorderThickness="0,0,0,1"
+                             Height="28"
+                             VerticalContentAlignment="Center"
+                             Margin="0,5,0,0"
+                             Padding="25,0,0,0">
+                        <TextBox.Background>
+                            <ImageBrush ImageSource="/Images/icons8-neuer-beitrag-48.png"
+                                        Stretch="Uniform"
+                                        AlignmentX="Left"
+                                        />
+                        </TextBox.Background>
+                    </TextBox>
+
+                    <Button x:Name="btnLogin"
+                            BorderThickness="0"
+                            Content="Login"
+                            Foreground="White"
+                            FontSize="12"
+                            FontFamily="Montserrat"
+                            Cursor="Hand"
+                            Grid.Column="2"
+                            Margin="0,50,0,0"
+                            Click="btnLogin_Click">
+
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#462AD8"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#28AEED"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="150" Height="40"
+                                        CornerRadius="20"
+                                        Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,15,0,0">
+                    <TextBlock
+                        Text="Forgot Password?"
+                        Foreground="DarkGray"
+                        FontSize="12"
+                        FontWeight="Medium"
+                        FontFamily="Montserrat"/>
+
+                    <TextBlock
+                        Text="Reset"
+                        Foreground="DarkGray"
+                        FontSize="12"
+                        FontWeight="Medium"
+                        FontFamily="Montserrat"
+                        Cursor="Hand"
+                        Margin="8,0,0,0"/>
+                    </StackPanel>
                 </StackPanel>
 
             </Grid>
