@@ -8,6 +8,6 @@ namespace BananaLove.Utility.Profile
 {
     class ProfileDatabaseHandler
     {
-
+        
     }
 }

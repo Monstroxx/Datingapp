@@ -4,7 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 # env file for Database specific
-BananaLove/Utility/.env.cs
+#BananaLove/Utility/.env.cs
 
 # User-specific files
 *.rsuser
