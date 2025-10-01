@@ -273,6 +273,26 @@
                         Cursor="Hand"
                         Margin="8,0,0,0"/>
                     </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,15,0,0">
+                        <TextBlock
+                        Text="Don't have an account?"
+                        Foreground="DarkGray"
+                        FontSize="12"
+                        FontWeight="Medium"
+                        FontFamily="Montserrat"/>
+
+                        <TextBlock
+                        Text="Sign Up"
+                        Foreground="DarkGray"
+                        FontSize="12"
+                        FontWeight="Medium"
+                        FontFamily="Montserrat"
+                        Cursor="Hand"
+                        Margin="8,0,0,0"/>
+                    </StackPanel>
                 </StackPanel>
 
             </Grid>
