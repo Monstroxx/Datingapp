@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BananaLove.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,7 @@ namespace BananaLove.View
         public LoginView()
         {
             InitializeComponent();
+            EnvHandler.LoadEnvs(".env");
         }
 
         public void Window_MouseDown(object sender, MouseButtonEventArgs e)
