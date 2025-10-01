@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:BananaLove"
              StartupUri="View/LoginView.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary Source="/Styles/UIColors.xaml"/>
     </Application.Resources>
 </Application>
