@@ -23,7 +23,7 @@ namespace BananaLove.View
         public LoginView()
         {
             InitializeComponent();
-            EnvHandler.LoadEnvs(".env");
+            EnvHandler.LoadEnvs("../../../.env");
         }
 
         public void Window_MouseDown(object sender, MouseButtonEventArgs e)
