@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -26,6 +27,7 @@ namespace BananaLove.Utility
                 var key = parts[0].Trim();
                 var value = parts[1].Trim();
                 Environment.SetEnvironmentVariable(key, value);
+                DebugHandler.Log($"Set environment variable: {key}={value}");
             }
         }
     }
