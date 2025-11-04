@@ -25,6 +25,7 @@ namespace BananaLove.View
         {
             InitializeComponent();
             EnvHandler.LoadEnvs("../../../.env");
+
         }
 
         public void Window_MouseDown(object sender, MouseButtonEventArgs e)
