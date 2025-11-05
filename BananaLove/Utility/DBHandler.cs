@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
@@ -47,9 +48,20 @@ namespace BananaLove.Utility
             {
                 var con = connect();
                 con.Open();
-                String query = $"SELECT id, user, email, password FROM `Login` WHERE email = {userEmail}";
+                String query = $"SELECT id, user, email, password FROM `Login`";// WHERE email = {userEmail}";
                 var cmd = new MySqlCommand(query, con);
-                DebugHandler.Log(cmd.ToString());
+
+                var reader = cmd.ExecuteReader();
+                var output = "";
+                while (reader.Read())
+                {
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        output += $"{reader.GetName(i)}: {reader[i]}  ";
+                    }
+                    DebugHandler.Log(output);
+                    output = "";
+                }
             }
             catch (Exception e)
             {
