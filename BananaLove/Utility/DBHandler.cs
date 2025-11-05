@@ -1,9 +1,10 @@
-﻿using System;
+﻿using MySqlConnector;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MySqlConnector;
+using System.Windows.Documents;
 
 namespace BananaLove.Utility
 {
@@ -18,8 +19,27 @@ namespace BananaLove.Utility
             Error,
         }
 
-        public static Login TryLogin(String email, String password)
+        public static Login TryLogin(String userEmail, String userPassword)
         {
+            string server = Environment.GetEnvironmentVariable("DatabaseServerIP");
+            string port = Environment.GetEnvironmentVariable("DatabaseServerPort");
+            string user = Environment.GetEnvironmentVariable("DatabaseServerProfilename");
+            string password = Environment.GetEnvironmentVariable("DatabaseServerPassword");
+            string database = Environment.GetEnvironmentVariable("DatabaseName");
+
+            string connectionString = $"server={server};port={port};userid={user};password={password};database={database};";
+            
+            try
+            {
+                var con = new MySqlConnection(​connectionString​);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return new Login(0,0,LoginStates.Error);
+            }
+
             return new Login(0,0,LoginStates.Error);
         }
 
