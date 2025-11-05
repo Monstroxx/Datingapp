@@ -4,7 +4,13 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 # env file for Database specific
-#.env
+*.env
+.env
+env
+BananaLove/.env
+/.env
+env.local
+.env.local      
 
 # User-specific files
 *.rsuser
@@ -402,3 +408,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+

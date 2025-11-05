@@ -4,12 +4,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BananaLove.Utility
 {
     class DebugHandler
     {
+        
+
         private static bool isDebugMode = true;
+
         public static void Log(string message)
         {
 
