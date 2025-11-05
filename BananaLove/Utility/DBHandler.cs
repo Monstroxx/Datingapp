@@ -42,6 +42,28 @@ namespace BananaLove.Utility
             return new MySqlConnection(connectionString);
         }
 
+        public static bool TestConnection()
+        {
+            try
+            {
+                var con = connect();
+                con.Open();
+                string query = "SHOW TABLES;";
+                var cmd = new MySqlCommand(query, con);
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    DebugHandler.Log(reader.GetString(0));
+                }
+                con.Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                DebugHandler.Log("Error while connecting to Database!" + e.Message);
+                return false;
+            }
+        }
         public static Login TryLogin(String userEmail, String userPassword)
         {
             try
