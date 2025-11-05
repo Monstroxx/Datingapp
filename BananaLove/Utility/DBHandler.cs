@@ -19,7 +19,7 @@ namespace BananaLove.Utility
             Error,
         }
 
-        public static Login TryLogin(String userEmail, String userPassword)
+        public static MySqlConnection connect()
         {
             string server = Environment.GetEnvironmentVariable("DatabaseServerIP");
             string port = Environment.GetEnvironmentVariable("DatabaseServerPort");
@@ -28,16 +28,22 @@ namespace BananaLove.Utility
             string database = Environment.GetEnvironmentVariable("DatabaseName");
 
             string connectionString = $"server={server};port={port};userid={user};password={password};database={database};";
-            
+
+            return new MySqlConnection(​connectionString​);
+        }
+
+        public static Login TryLogin(String userEmail, String userPassword)
+        {   
             try
             {
-                var con = new MySqlConnection(​connectionString​);
+                var con = connect();
                 con.Open();
-
+                String query = $"SELECT id FROM users WHERE email = @userEmail";
+                var cmd = new MySqlCommand(query, con);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                DebugHandler.Log("Error while Login!" + e.Message);
                 return new Login(0,0,LoginStates.Error);
             }
 
