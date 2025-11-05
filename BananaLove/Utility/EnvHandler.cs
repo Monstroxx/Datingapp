@@ -12,6 +12,7 @@ namespace BananaLove.Utility
     {
         public static void LoadEnvs(string filePath)
         {
+            DebugHandler.seperate();
             if (!File.Exists(filePath))
                 throw new FileNotFoundException($"The file '{filePath}' does not exist.");
 
@@ -29,6 +30,7 @@ namespace BananaLove.Utility
                 Environment.SetEnvironmentVariable(key, value);
                 DebugHandler.Log($"Set environment variable: {key}={value}");
             }
+            DebugHandler.seperate();
         }
     }
 }

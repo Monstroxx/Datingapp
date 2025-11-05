@@ -10,7 +10,7 @@ namespace BananaLove.Utility
 {
     class DebugHandler
     {
-        
+
 
         private static bool isDebugMode = true;
 
@@ -25,6 +25,16 @@ namespace BananaLove.Utility
                 using (StreamWriter writer = new StreamWriter("debug.log", true))
                 {
                     writer.WriteLine(debugMessage);
+                }
+            }
+        }
+        public static void seperate()
+        {
+            if (isDebugMode)
+            {
+                using (StreamWriter writer = new StreamWriter("debug.log", true))
+                {
+                    writer.WriteLine("======================================================");
                 }
             }
         }
