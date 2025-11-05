@@ -32,6 +32,7 @@ namespace BananaLove.Utility
             try
             {
                 var con = new MySqlConnection(​connectionString​);
+                con.Open();
 
             }
             catch (Exception e)
