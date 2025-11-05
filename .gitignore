@@ -7,6 +7,10 @@
 *.env
 .env
 env
+BananaLove/.env
+/.env
+env.local
+.env.local      
 
 # User-specific files
 *.rsuser
@@ -404,4 +408,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-BananaLove/.env
+
