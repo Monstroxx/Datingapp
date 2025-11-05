@@ -46,7 +46,7 @@ namespace BananaLove.View
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-
+            var a = DBHandler.TryLogin(txtMail.Text, txtPass.Password);
         }
     }
 }

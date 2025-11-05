@@ -10,7 +10,7 @@ namespace BananaLove.Utility
 {
     public static class DBHandler
     {
-        
+
 
         public enum LoginStates
         {
@@ -27,49 +27,40 @@ namespace BananaLove.Utility
             string password = Environment.GetEnvironmentVariable("DatabaseServerPassword");
             string database = Environment.GetEnvironmentVariable("DatabaseName");
 
+            if (string.IsNullOrWhiteSpace(server) ||
+                string.IsNullOrWhiteSpace(port) ||
+                string.IsNullOrWhiteSpace(user) ||
+                string.IsNullOrWhiteSpace(password) ||
+                string.IsNullOrWhiteSpace(database))
+            {
+                throw new InvalidOperationException("Eine oder mehrere Datenbank-Umgebungsvariablen sind nicht gesetzt.");
+            }
+
             string connectionString = $"server={server};port={port};userid={user};password={password};database={database};";
 
-            return new MySqlConnection(​connectionString​);
+            return new MySqlConnection(connectionString);
         }
 
-        public static bool TestConnection()
+        public static Login TryLogin(String userEmail, String userPassword)
         {
             try
             {
                 var con = connect();
                 con.Open();
-                string query = $"SHOW TABLES;";
+                String query = $"SELECT id, user, email, password FROM `Login` WHERE email = {userEmail}";
                 var cmd = new MySqlCommand(query, con);
                 DebugHandler.Log(cmd.ToString());
-                con.Close();
-                return true;
-            }
-            catch (Exception e)
-            {
-                DebugHandler.Log("Database connection failed: " + e.Message);
-                return false;
-            }
-        }
-
-        public static Login TryLogin(String userEmail, String userPassword)
-        {   
-            try
-            {
-                var con = connect();
-                con.Open();
-                String query = $"SELECT id FROM users WHERE email = @userEmail";
-                var cmd = new MySqlCommand(query, con);
             }
             catch (Exception e)
             {
                 DebugHandler.Log("Error while Login!" + e.Message);
-                return new Login(0,0,LoginStates.Error);
+                return new Login(0, 0, LoginStates.Error);
             }
 
-            return new Login(0,0,LoginStates.Error);
+            return new Login(0, 0, LoginStates.Error);
         }
 
-        public static bool SaveLogin(  )
+        public static bool SaveLogin()
         {
             return false;
         }
