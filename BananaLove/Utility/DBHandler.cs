@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.JavaScript;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
@@ -76,7 +77,7 @@ namespace BananaLove.Utility
 
                 var reader = cmd.ExecuteReader();
                 string output = "";
-                int results = 0;
+                List<Login> results = [];
                 while (reader.Read())
                 {
                     DebugHandler.seperate();
@@ -88,14 +89,13 @@ namespace BananaLove.Utility
 
                     if (password == userPassword)
                     {
+                        results.Add(new Login(user,id,LoginStates.ExistingUser));
                         DebugHandler.Log("Found user bellow! Password is correct. :)");
                     }
                     else
                     {
                         DebugHandler.Log("Found user bellow! Password is not correct! :(");
                     }
-
-                    results++;
 
                     for (int i = 0; i < reader.FieldCount; i++)
                     {
@@ -106,26 +106,41 @@ namespace BananaLove.Utility
                 }
                 DebugHandler.Log($"Found {results} results.");
                 DebugHandler.seperate();
+
+                if (results.Count == 0)
+                {
+                    con.Close();
+                    return SaveLogin(userEmail, userPassword);
+                }
+                else if (results.Count == 1)
+                {
+                    con.Close();
+                    return results[0];
+                }
+                else
+                {
+                    con.Close();
+                    DebugHandler.Log($"Found to many results: {results}.");
+                    return new Login(-1, -1, LoginStates.Error);
+                }
             }
             catch (Exception e)
             {
                 con.Close();
                 DebugHandler.Log("Error while Login!" + e.Message);
-                return new Login(0, 0, LoginStates.Error);
+                return new Login(-1, -1, LoginStates.Error);
             }
-
-            con.Close();
-            return new Login(0, 0, LoginStates.Error);
         }
 
-        public static bool SaveLogin(string userEmail, string userPassword) // NICHT GETESTET!!!
+        public static Login SaveLogin(string userEmail, string userPassword) // NICHT GETESTET!!!
         {
             DebugHandler.seperate();
+            var con = connect();
+            con.Open();
             try
             {
                 // 4. Login -> 3. User -> 2. Profile -> 1. Address
-                var con = connect();
-
+                // TODO: get id and paste it in
                 string insertAddress = "INSERT INTO Address (street, number, city, postal) VALUES (\"Hauptstraße\", 1, \"Berlin\", 10115)";
                 MySqlCommand cmd = new MySqlCommand(insertAddress, con);
                 cmd.ExecuteNonQuery();
@@ -155,6 +170,7 @@ namespace BananaLove.Utility
                 cmd.Parameters.AddWithValue("@email", userEmail);
                 cmd.Parameters.AddWithValue("@password", userPassword); // besser: vorher hashen! (Mache ich sicher später)
                 cmd.ExecuteNonQuery();
+                long loginId = cmd.LastInsertedId;
 
                 /*
                  * using BCrypt.Net;
@@ -164,26 +180,24 @@ namespace BananaLove.Utility
                  */
 
                 DebugHandler.Log($"Wrote new Login in {cmd.LastInsertedId}.");
-                return true;
+                con.Close();
+                return new Login(userId, loginId, LoginStates.NewUser);
             }
             catch
             {
                 DebugHandler.Log("Error while writing new Login. Please check the Database!!!");
-                return false;
+                con.Close();
+                return new Login(-1,-1, LoginStates.Error);
             }
-
-
-            return false;
         }
-
     }
 
     public class Login
     {
-        int UserID, LoginID;
+        long UserID, LoginID;
         DBHandler.LoginStates State;
 
-        public Login(int userID, int loginID, DBHandler.LoginStates state)
+        public Login(long userID, long loginID, DBHandler.LoginStates state)
         {
             UserID = userID;
             LoginID = loginID;
