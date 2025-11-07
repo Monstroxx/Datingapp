@@ -10,16 +10,15 @@ namespace BananaLove.Utility
 {
     class DebugHandler
     {
-
-
         private static bool isDebugMode = true;
-
-        public static void Log(string message)
+        
+        static string time {get{ return DateTime.Now.ToString("HH:mm:ss.fff"); }}
+public static void Log(string message)
         {
-
             if (isDebugMode)
             {
-                string debugMessage = $"[DEBUG] {DateTime.Now}: {message}";
+                TimeOnly now = TimeOnly.FromDateTime(DateTime.Now);
+                string debugMessage = $"[DEBUG] {time}: {message}";
                 Console.WriteLine(debugMessage);
                 //write to a log file
                 using (StreamWriter writer = new StreamWriter("debug.log", true))
@@ -32,7 +31,7 @@ namespace BananaLove.Utility
         {
             if (isDebugMode)
             {
-                string errorMessage = $"[ERROR] {DateTime.Now}: {message}";
+                string errorMessage = $"[ERROR] {time}: {message}";
                 Console.WriteLine(errorMessage);
                 //write to a log file
                 using (StreamWriter writer = new StreamWriter("debug.log", true))
@@ -47,7 +46,7 @@ namespace BananaLove.Utility
             {
                 using (StreamWriter writer = new StreamWriter("debug.log", true))
                 {
-                    writer.WriteLine("======================================================");
+                    writer.WriteLine("=================================================================================");
                 }
             }
         }
