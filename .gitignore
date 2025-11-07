@@ -405,3 +405,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 BananaLove/.env
+/BananaLove/.idea
