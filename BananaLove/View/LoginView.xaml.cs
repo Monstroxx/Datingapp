@@ -51,7 +51,7 @@ namespace BananaLove.View
 
         private void Signup_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
+            var a = DBHandler.SaveLogin(txtMail.Text, txtPass.Password);
         }
     }
 }
