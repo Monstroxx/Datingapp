@@ -28,6 +28,19 @@ namespace BananaLove.Utility
                 }
             }
         }
+        public static void LogError(string message)
+        {
+            if (isDebugMode)
+            {
+                string errorMessage = $"[ERROR] {DateTime.Now}: {message}";
+                Console.WriteLine(errorMessage);
+                //write to a log file
+                using (StreamWriter writer = new StreamWriter("debug.log", true))
+                {
+                    writer.WriteLine(errorMessage);
+                }
+            }
+        }
         public static void seperate()
         {
             if (isDebugMode)
