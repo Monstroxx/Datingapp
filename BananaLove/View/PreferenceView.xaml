@@ -1,0 +1,583 @@
+<Window x:Class="BananaLove.View.PreferenceView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BananaLove.View"
+        mc:Ignorable="d"
+        Title="PreferenceView" Height="700" Width="1300"
+        WindowStyle="None"
+        ResizeMode="CanResize"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        AllowsTransparency="True"
+        MouseDown="Window_MouseDown"
+        >
+    <Border CornerRadius="12">
+        <Border.Background>
+            <ImageBrush ImageSource="/Images/nebula.png"
+                        Stretch="None"/>
+        </Border.Background>
+
+        <Border CornerRadius="10"
+            BorderThickness="1"
+            Opacity="0.8"
+            >
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="{StaticResource winBorderColor1}" Offset="0" />
+                    <GradientStop Color="{StaticResource winBorderColor2}" Offset="0.75" />
+                    <GradientStop Color="{StaticResource winBorderColor3}" Offset="1" />
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
+                    <GradientStop Color="{StaticResource primaryBackColor1}" Offset="0" />
+                    <GradientStop Color="{StaticResource primaryBackColor2}" Offset="0.75" />
+                </LinearGradientBrush>
+            </Border.Background>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header with Title and Window Controls -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="5"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="PREFERENCES"
+                               Foreground="DarkGray"
+                               FontSize="25"
+                               FontFamily="Montserrat"
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Margin="10,0,0,0"/>
+
+                    <Button x:Name="btnMinimize"
+                            BorderThickness="0"
+                            Content="-"
+                            Foreground="White"
+                            FontSize="16"
+                            FontFamily="Montserrat"
+                            Cursor="Hand"
+                            Grid.Column="1"
+                            Click="btnMinimize_Click">
+
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#28AEED"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#278BEF"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="18" Height="18"
+                                        CornerRadius="9"
+                                        Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+
+                    </Button>
+
+                    <Button x:Name="btnClose"
+                            BorderThickness="0"
+                            Content="X"
+                            Foreground="White"
+                            FontSize="12"
+                            FontFamily="Montserrat"
+                            Cursor="Hand"
+                            Grid.Column="2"
+                            Click="btnClose_Click">
+
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#DA34AE"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#C62DAE"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="18" Height="18"
+                                        CornerRadius="9"
+                                        Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Grid>
+
+                <!-- Content Area -->
+                <ScrollViewer Grid.Row="1" 
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              Margin="20,20,20,20">
+                    <StackPanel Orientation="Vertical">
+                        <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Adresse Section -->
+                        <StackPanel Grid.Column="0" 
+                                    Orientation="Vertical"
+                                    Margin="20,0,20,0"
+                                    Width="350">
+                            
+                            <TextBlock Text="Adresse"
+                                       Foreground="DarkGray"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       FontFamily="Montserrat"
+                                       Margin="0,0,0,20"/>
+
+                            <TextBlock Text="Straße Hausnummer"
+                                       Foreground="DarkGray"
+                                       FontSize="12"
+                                       FontWeight="Medium"
+                                       FontFamily="Montserrat"
+                                       Margin="0,0,0,5"/>
+
+                            <TextBox x:Name="txtStreet"
+                                     FontSize="13"
+                                     FontWeight="Medium"
+                                     FontFamily="Montserrat"
+                                     Foreground="White"
+                                     CaretBrush="LightGray"
+                                     BorderBrush="DarkGray"
+                                     BorderThickness="0,0,0,1"
+                                     Height="28"
+                                     VerticalContentAlignment="Center"
+                                     Margin="0,0,0,20"
+                                     Padding="25,0,0,0">
+                                <TextBox.Background>
+                                    <ImageBrush ImageSource="/Images/icons8-zuhause-48.png"
+                                                Stretch="Uniform"
+                                                AlignmentX="Left"/>
+                                </TextBox.Background>
+                            </TextBox>
+
+                            <TextBlock Text="Stadt PLZ"
+                                       Foreground="DarkGray"
+                                       FontSize="12"
+                                       FontWeight="Medium"
+                                       FontFamily="Montserrat"
+                                       Margin="0,0,0,5"/>
+
+                            <TextBox x:Name="txtCity"
+                                     FontSize="13"
+                                     FontWeight="Medium"
+                                     FontFamily="Montserrat"
+                                     Foreground="White"
+                                     CaretBrush="LightGray"
+                                     BorderBrush="DarkGray"
+                                     BorderThickness="0,0,0,1"
+                                     Height="28"
+                                     VerticalContentAlignment="Center"
+                                     Margin="0,0,0,20"
+                                     Padding="25,0,0,0">
+                                <TextBox.Background>
+                                    <ImageBrush ImageSource="/Images/icons8-stadt-48.png"
+                                                Stretch="Uniform"
+                                                AlignmentX="Left"/>
+                                </TextBox.Background>
+                            </TextBox>
+                        </StackPanel>
+
+                        <!-- Infos Section -->
+                        <StackPanel Grid.Column="1" 
+                                    Orientation="Vertical"
+                                    Margin="20,0,20,0"
+                                    Width="350">
+                            
+                            <TextBlock Text="Infos"
+                                       Foreground="DarkGray"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       FontFamily="Montserrat"
+                                       Margin="0,0,0,20"/>
+
+                            <TextBlock Text="Geschlecht:"
+                                       Foreground="DarkGray"
+                                       FontSize="12"
+                                       FontWeight="Medium"
+                                       FontFamily="Montserrat"
+                                       Margin="0,0,0,10"/>
+
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0,0,0,20">
+                                <ToggleButton x:Name="btnGenderFemale"
+                                              Width="50"
+                                              Height="50"
+                                              Margin="0,0,10,0"
+                                              Checked="GenderButton_Checked"
+                                              Tag="female">
+                                    <ToggleButton.Style>
+                                        <Style TargetType="ToggleButton">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderBrush" Value="DarkGray"/>
+                                            <Setter Property="BorderThickness" Value="1"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ToggleButton">
+                                                        <Border Background="{TemplateBinding Background}"
+                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                                CornerRadius="5">
+                                                            <Image Source="/Images/icons8-venussymbol-48.png"
+                                                                   Width="30"
+                                                                   Height="30"
+                                                                   Margin="10"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsChecked" Value="True">
+                                                    <Setter Property="BorderBrush" Value="#462AD8"/>
+                                                    <Setter Property="BorderThickness" Value="2"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ToggleButton.Style>
+                                </ToggleButton>
+
+                                <ToggleButton x:Name="btnGenderMale"
+                                              Width="50"
+                                              Height="50"
+                                              Margin="0,0,10,0"
+                                              Checked="GenderButton_Checked"
+                                              Tag="male">
+                                    <ToggleButton.Style>
+                                        <Style TargetType="ToggleButton">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderBrush" Value="DarkGray"/>
+                                            <Setter Property="BorderThickness" Value="1"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ToggleButton">
+                                                        <Border Background="{TemplateBinding Background}"
+                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                                CornerRadius="5">
+                                                            <Image Source="/Images/icons8-marssymbol-48.png"
+                                                                   Width="30"
+                                                                   Height="30"
+                                                                   Margin="10"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsChecked" Value="True">
+                                                    <Setter Property="BorderBrush" Value="#462AD8"/>
+                                                    <Setter Property="BorderThickness" Value="2"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ToggleButton.Style>
+                                </ToggleButton>
+
+                                <ToggleButton x:Name="btnGenderOther"
+                                              Width="50"
+                                              Height="50"
+                                              Checked="GenderButton_Checked"
+                                              Tag="other">
+                                    <ToggleButton.Style>
+                                        <Style TargetType="ToggleButton">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderBrush" Value="DarkGray"/>
+                                            <Setter Property="BorderThickness" Value="1"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ToggleButton">
+                                                        <Border Background="{TemplateBinding Background}"
+                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                                CornerRadius="5">
+                                                            <Image Source="/Images/bisexuell.png"
+                                                                   Width="30"
+                                                                   Height="30"
+                                                                   Margin="10"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsChecked" Value="True">
+                                                    <Setter Property="BorderBrush" Value="#462AD8"/>
+                                                    <Setter Property="BorderThickness" Value="2"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ToggleButton.Style>
+                                </ToggleButton>
+                            </StackPanel>
+
+                            <TextBlock Text="Birthday"
+                                       Foreground="DarkGray"
+                                       FontSize="12"
+                                       FontWeight="Medium"
+                                       FontFamily="Montserrat"
+                                       Margin="0,0,0,5"/>
+
+                            <DatePicker x:Name="dpBirthday"
+                                        FontSize="13"
+                                        FontWeight="Medium"
+                                        FontFamily="Montserrat"
+                                        Foreground="White"
+                                        SelectedDateFormat="Short"
+                                        Margin="0,0,0,5"
+                                        Height="35"
+                                        VerticalContentAlignment="Center">
+                                <DatePicker.Style>
+                                    <Style TargetType="DatePicker">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderBrush" Value="#462AD8"/>
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                        <Style.Resources>
+                                            <Style TargetType="DatePickerTextBox">
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="BorderThickness" Value="0"/>
+                                                <Setter Property="Padding" Value="5,0,0,0"/>
+                                            </Style>
+                                        </Style.Resources>
+                                    </Style>
+                                </DatePicker.Style>
+                            </DatePicker>
+                            
+                            <TextBlock Text="MM/DD/YYYY"
+                                       Foreground="DarkGray"
+                                       FontSize="10"
+                                       FontFamily="Montserrat"
+                                       Margin="0,0,0,20"/>
+                        </StackPanel>
+
+                        <!-- Vorlieben Section -->
+                        <StackPanel Grid.Column="2" 
+                                    Orientation="Vertical"
+                                    Margin="20,0,20,0"
+                                    Width="350">
+                            
+                            <TextBlock Text="Vorlieben"
+                                       Foreground="DarkGray"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       FontFamily="Montserrat"
+                                       Margin="0,0,0,20"/>
+
+                            <TextBlock Text="Geschlecht:"
+                                       Foreground="DarkGray"
+                                       FontSize="12"
+                                       FontWeight="Medium"
+                                       FontFamily="Montserrat"
+                                       Margin="0,0,0,10"/>
+
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0,0,0,20">
+                                <ToggleButton x:Name="btnPreferenceFemale"
+                                              Width="50"
+                                              Height="50"
+                                              Margin="0,0,10,0"
+                                              Checked="PreferenceGenderButton_Checked"
+                                              Tag="female">
+                                    <ToggleButton.Style>
+                                        <Style TargetType="ToggleButton">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderBrush" Value="DarkGray"/>
+                                            <Setter Property="BorderThickness" Value="1"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ToggleButton">
+                                                        <Border Background="{TemplateBinding Background}"
+                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                                CornerRadius="5">
+                                                            <Image Source="/Images/icons8-venussymbol-48.png"
+                                                                   Width="30"
+                                                                   Height="30"
+                                                                   Margin="10"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsChecked" Value="True">
+                                                    <Setter Property="BorderBrush" Value="#462AD8"/>
+                                                    <Setter Property="BorderThickness" Value="2"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ToggleButton.Style>
+                                </ToggleButton>
+
+                                <ToggleButton x:Name="btnPreferenceMale"
+                                              Width="50"
+                                              Height="50"
+                                              Margin="0,0,10,0"
+                                              Checked="PreferenceGenderButton_Checked"
+                                              Tag="male">
+                                    <ToggleButton.Style>
+                                        <Style TargetType="ToggleButton">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderBrush" Value="DarkGray"/>
+                                            <Setter Property="BorderThickness" Value="1"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ToggleButton">
+                                                        <Border Background="{TemplateBinding Background}"
+                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                                CornerRadius="5">
+                                                            <Image Source="/Images/icons8-marssymbol-48.png"
+                                                                   Width="30"
+                                                                   Height="30"
+                                                                   Margin="10"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsChecked" Value="True">
+                                                    <Setter Property="BorderBrush" Value="#462AD8"/>
+                                                    <Setter Property="BorderThickness" Value="2"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ToggleButton.Style>
+                                </ToggleButton>
+
+                                <ToggleButton x:Name="btnPreferenceOther"
+                                              Width="50"
+                                              Height="50"
+                                              Checked="PreferenceGenderButton_Checked"
+                                              Tag="other">
+                                    <ToggleButton.Style>
+                                        <Style TargetType="ToggleButton">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderBrush" Value="DarkGray"/>
+                                            <Setter Property="BorderThickness" Value="1"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ToggleButton">
+                                                        <Border Background="{TemplateBinding Background}"
+                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                                CornerRadius="5">
+                                                            <Image Source="/Images/bisexuell.png"
+                                                                   Width="30"
+                                                                   Height="30"
+                                                                   Margin="10"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsChecked" Value="True">
+                                                    <Setter Property="BorderBrush" Value="#462AD8"/>
+                                                    <Setter Property="BorderThickness" Value="2"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ToggleButton.Style>
+                                </ToggleButton>
+                            </StackPanel>
+
+                            <TextBlock Text="Radius:"
+                                       Foreground="DarkGray"
+                                       FontSize="12"
+                                       FontWeight="Medium"
+                                       FontFamily="Montserrat"
+                                       Margin="0,0,0,10"/>
+
+                            <StackPanel Orientation="Vertical"
+                                        Margin="0,0,0,20">
+                                <Slider x:Name="sliderRadius"
+                                        Minimum="0"
+                                        Maximum="1000"
+                                        Value="50"
+                                        TickFrequency="50"
+                                        IsSnapToTickEnabled="True"
+                                        Margin="0,0,0,10"/>
+                                
+                                <TextBlock x:Name="txtRadiusValue"
+                                           Text="{Binding ElementName=sliderRadius, Path=Value, StringFormat='{}{0:F0} km'}"
+                                           Foreground="White"
+                                           FontSize="13"
+                                           FontWeight="Medium"
+                                           FontFamily="Montserrat"
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Save Button -->
+                <Button x:Name="btnSave"
+                        Grid.Row="2"
+                        BorderThickness="0"
+                        Content="Speichern"
+                        Foreground="White"
+                        FontSize="12"
+                        FontFamily="Montserrat"
+                        Cursor="Hand"
+                        HorizontalAlignment="Center"
+                        Margin="0,20,0,20"
+                        Click="btnSave_Click">
+
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#462AD8"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#28AEED"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Width="150" Height="40"
+                                    CornerRadius="20"
+                                    Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center"
+                                                  HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+            </Grid>
+        </Border>
+    </Border>
+
+</Window>
+
