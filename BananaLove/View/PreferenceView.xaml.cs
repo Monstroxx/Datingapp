@@ -36,6 +36,18 @@ namespace BananaLove.View
             WindowState = WindowState.Minimized;
         }
 
+        private void btnMaximize_Click(object sender, RoutedEventArgs e)
+        {
+            if (WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Normal;
+            }
+            else
+            {
+                WindowState = WindowState.Maximized;
+            }
+        }
+
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
             this.Close();

@@ -51,6 +51,7 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="25"/>
                         <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="25"/>
                         <ColumnDefinition Width="5"/>
                     </Grid.ColumnDefinitions>
 
@@ -96,6 +97,39 @@
 
                     </Button>
 
+                    <Button x:Name="btnMaximize"
+                            BorderThickness="0"
+                            Content="□"
+                            Foreground="White"
+                            FontSize="14"
+                            FontFamily="Montserrat"
+                            Cursor="Hand"
+                            Grid.Column="2"
+                            Click="btnMaximize_Click">
+
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#462AD8"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#28AEED"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="18" Height="18"
+                                        CornerRadius="9"
+                                        Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
                     <Button x:Name="btnClose"
                             BorderThickness="0"
                             Content="X"
@@ -103,7 +137,7 @@
                             FontSize="12"
                             FontFamily="Montserrat"
                             Cursor="Hand"
-                            Grid.Column="2"
+                            Grid.Column="3"
                             Click="btnClose_Click">
 
                         <Button.Style>
@@ -137,6 +171,10 @@
                               Margin="20,20,20,20">
                     <StackPanel Orientation="Vertical">
                         <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -144,7 +182,7 @@
                         </Grid.ColumnDefinitions>
 
                         <!-- Adresse Section -->
-                        <StackPanel Grid.Column="0" 
+                        <StackPanel Grid.Row="0" Grid.Column="0" 
                                     Orientation="Vertical"
                                     Margin="20,0,20,0"
                                     Width="350">
@@ -210,7 +248,7 @@
                         </StackPanel>
 
                         <!-- Infos Section -->
-                        <StackPanel Grid.Column="1" 
+                        <StackPanel Grid.Row="0" Grid.Column="1" 
                                     Orientation="Vertical"
                                     Margin="20,0,20,0"
                                     Width="350">
@@ -380,7 +418,7 @@
                         </StackPanel>
 
                         <!-- Vorlieben Section -->
-                        <StackPanel Grid.Column="2" 
+                        <StackPanel Grid.Row="0" Grid.Column="2" 
                                     Orientation="Vertical"
                                     Margin="20,0,20,0"
                                     Width="350">
@@ -534,6 +572,112 @@
                                            FontFamily="Montserrat"
                                            HorizontalAlignment="Center"/>
                             </StackPanel>
+                        </StackPanel>
+
+                        <!-- Persönliche Infos Section -->
+                        <StackPanel Grid.Row="1" 
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="3"
+                                    Orientation="Vertical"
+                                    Margin="20,30,20,0"
+                                    HorizontalAlignment="Stretch">
+                            
+                            <TextBlock Text="Persönliche Infos"
+                                       Foreground="DarkGray"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       FontFamily="Montserrat"
+                                       Margin="0,0,0,20"/>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="Vorname"
+                                           Grid.Row="0" Grid.Column="0"
+                                           Foreground="DarkGray"
+                                           FontSize="12"
+                                           FontWeight="Medium"
+                                           FontFamily="Montserrat"
+                                           Margin="0,0,0,5"/>
+
+                                <TextBox x:Name="txtFirstName"
+                                         Grid.Row="1" Grid.Column="0"
+                                         FontSize="13"
+                                         FontWeight="Medium"
+                                         FontFamily="Montserrat"
+                                         Foreground="White"
+                                         CaretBrush="LightGray"
+                                         BorderBrush="DarkGray"
+                                         BorderThickness="0,0,0,1"
+                                         Height="28"
+                                         VerticalContentAlignment="Center"
+                                         Margin="0,0,20,20"
+                                         Padding="25,0,0,0">
+                                    <TextBox.Background>
+                                        <ImageBrush ImageSource="/Images/icons8-benutzer-48.png"
+                                                    Stretch="Uniform"
+                                                    AlignmentX="Left"/>
+                                    </TextBox.Background>
+                                </TextBox>
+
+                                <TextBlock Text="Nachname"
+                                           Grid.Row="0" Grid.Column="1"
+                                           Foreground="DarkGray"
+                                           FontSize="12"
+                                           FontWeight="Medium"
+                                           FontFamily="Montserrat"
+                                           Margin="0,0,0,5"/>
+
+                                <TextBox x:Name="txtLastName"
+                                         Grid.Row="1" Grid.Column="1"
+                                         FontSize="13"
+                                         FontWeight="Medium"
+                                         FontFamily="Montserrat"
+                                         Foreground="White"
+                                         CaretBrush="LightGray"
+                                         BorderBrush="DarkGray"
+                                         BorderThickness="0,0,0,1"
+                                         Height="28"
+                                         VerticalContentAlignment="Center"
+                                         Margin="0,0,0,20"
+                                         Padding="25,0,0,0">
+                                    <TextBox.Background>
+                                        <ImageBrush ImageSource="/Images/icons8-benutzer-48.png"
+                                                    Stretch="Uniform"
+                                                    AlignmentX="Left"/>
+                                    </TextBox.Background>
+                                </TextBox>
+                            </Grid>
+
+                            <TextBlock Text="Bio"
+                                       Foreground="DarkGray"
+                                       FontSize="12"
+                                       FontWeight="Medium"
+                                       FontFamily="Montserrat"
+                                       Margin="0,0,0,5"/>
+
+                            <TextBox x:Name="txtBio"
+                                     FontSize="13"
+                                     FontWeight="Medium"
+                                     FontFamily="Montserrat"
+                                     Foreground="White"
+                                     CaretBrush="LightGray"
+                                     BorderBrush="DarkGray"
+                                     BorderThickness="0,0,0,1"
+                                     Height="122"
+                                     VerticalContentAlignment="Top"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     Margin="0,0,0,20"
+                                     Padding="25,5,0,0">
+                            </TextBox>
                         </StackPanel>
                         </Grid>
                     </StackPanel>
