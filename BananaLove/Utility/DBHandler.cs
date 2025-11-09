@@ -16,6 +16,8 @@ namespace BananaLove.Utility
         {
             NewUser,
             ExistingUser,
+            EmailNotFound,
+            PasswordIncorrect,
             Error,
         }
 
@@ -66,128 +68,140 @@ namespace BananaLove.Utility
 
         public static Login TryLogin(string userEmail, string userPassword)
         {
-            MySqlConnection con = connect();
+            DebugHandler.seperate();
+            var con = connect();
             con.Open();
 
             try
             {
-                string query = $"SELECT id, user, email, password FROM `Login` WHERE `email` = @userEmail"; // Nur @userEmail, um SQL injection zu vermeiden
+                string query = "SELECT id, user_id, email, password FROM `Login` WHERE `email` = @userEmail";
                 var cmd = new MySqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@userEmail", userEmail);
 
                 var reader = cmd.ExecuteReader();
-                string output = "";
-                List<Login> results = [];
-                while (reader.Read())
-                {
-                    DebugHandler.seperate();
 
-                    int id = reader.GetInt32("id");
-                    int user = reader.GetInt32("user");
-                    string email = reader.GetString("email");
-                    string password = reader.GetString("password");
-
-                    if (password == userPassword)
-                    {
-                        results.Add(new Login(user,id,LoginStates.ExistingUser));
-                        DebugHandler.Log("Found user bellow! Password is correct. :)");
-                    }
-                    else
-                    {
-                        DebugHandler.Log("Found user bellow! Password is not correct! :(");
-                    }
-
-                    for (int i = 0; i < reader.FieldCount; i++)
-                    {
-                        output += $"{reader.GetName(i)}: {reader[i]}  ";
-                    }
-                    DebugHandler.Log(output);
-                    output = "";
-                }
-                DebugHandler.Log($"Found {results} results.");
-                DebugHandler.seperate();
-
-                if (results.Count == 0)
+                if (!reader.Read())
                 {
-                    con.Close();
-                    return SaveLogin(userEmail, userPassword);
+                    DebugHandler.Log("Login failed: Email not found.");
+                    return Login.Error(LoginStates.EmailNotFound);
                 }
-                else if (results.Count == 1)
+
+                long loginId = reader.GetInt64("id");
+                long userId = reader.GetInt64("user_id");
+                string storedHash = reader.GetString("password");
+
+                // Wenn Plaintext benutzt wird:
+                if (storedHash == userPassword)
                 {
-                    con.Close();
-                    return results[0];
+                    DebugHandler.Log($"Login successful for user_id={userId}.");
+                    return Login.Error(LoginStates.ExistingUser);
                 }
-                else
+
+                // Wenn schon bcrypt benutzt wird (Mach ich safe bald):
+                /*
+                if (BCrypt.Net.BCrypt.Verify(userPassword, storedHash))
                 {
-                    con.Close();
-                    DebugHandler.Log($"Found to many results: {results}.");
-                    return new Login(-1, -1, LoginStates.Error);
+                    DebugHandler.Log($"Login successful for user_id={userId}.");
+                    return new Login(userId, loginId, LoginStates.Success);
                 }
+                */
+
+                DebugHandler.Log("Login failed: Wrong password.");
+                return Login.Error(LoginStates.PasswordIncorrect);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                con.Close();
-                DebugHandler.Log("Error while Login!" + e.Message);
-                return new Login(-1, -1, LoginStates.Error);
+                DebugHandler.Log($"DB-Error during login: {ex.Message}");
+                return Login.Error();
             }
         }
 
-        public static Login SaveLogin(string userEmail, string userPassword) // NICHT GETESTET!!!
+        public static Login SaveLogin(string userEmail, string userPassword)
         {
             DebugHandler.seperate();
+
+            if (string.IsNullOrWhiteSpace(userEmail) || string.IsNullOrWhiteSpace(userPassword))
+            {
+                DebugHandler.Log("SaveLogin called with empty email or password.");
+                return Login.Error();
+            }
+
             var con = connect();
             con.Open();
+            var trans = con.BeginTransaction(); // Macht, dass Änderungen erst mit Commit() gespeichert werden. Ist bei crashes wichtig, da die Hälfte noch bestehen bleibt.
+
             try
             {
-                // 4. Login -> 3. User -> 2. Profile -> 1. Address
-                // TODO: get id and paste it in
-                string insertAddress = "INSERT INTO Address (street, number, city, postal) VALUES (\"Hauptstraße\", 1, \"Berlin\", 10115)";
-                MySqlCommand cmd = new MySqlCommand(insertAddress, con);
-                cmd.ExecuteNonQuery();
-                long addressId = cmd.LastInsertedId;
+                // 1. Address
+                const string insertAddress = @"
+            INSERT INTO Address (street, number, city, postal)
+            VALUES (@street, @number, @city, @postal)";
+                var cmdAddress = new MySqlCommand(insertAddress, con, trans);
+                cmdAddress.Parameters.AddWithValue("@street", "Hauptstraße");
+                cmdAddress.Parameters.AddWithValue("@number", "1");
+                cmdAddress.Parameters.AddWithValue("@city", "Berlin");
+                cmdAddress.Parameters.AddWithValue("@postal", 10115);
+                cmdAddress.ExecuteNonQuery();
+                long addressId = cmdAddress.LastInsertedId;
 
-                DebugHandler.Log($"Wrote new Address in {cmd.LastInsertedId}.");
+                DebugHandler.Log($"Inserted Address (id={addressId}).");
 
-                string insertProfile = "INSERT INTO Profil (bio, picture, address_id) VALUES (\"No Bio\", \"\", @address_id)";
-                cmd = new MySqlCommand(insertProfile, con);
-                cmd.Parameters.AddWithValue("@address_id", addressId);
-                cmd.ExecuteNonQuery();
-                long profileId = cmd.LastInsertedId;
+                // 2. Profile
+                const string insertProfile = @"
+            INSERT INTO Profil (bio, picture, address_id)
+            VALUES (@bio, @picture, @address_id)";
+                var cmdProfile = new MySqlCommand(insertProfile, con, trans);
+                cmdProfile.Parameters.AddWithValue("@bio", "No Bio");
+                cmdProfile.Parameters.AddWithValue("@picture", "");
+                cmdProfile.Parameters.AddWithValue("@address_id", addressId);
+                cmdProfile.ExecuteNonQuery();
+                long profileId = cmdProfile.LastInsertedId;
 
-                DebugHandler.Log($"Wrote new Profile in {cmd.LastInsertedId}.");
+                DebugHandler.Log($"Inserted Profile (id={profileId}).");
 
-                string insertUser = "INSERT INTO User (firstname, lastname, birthday, gender, postal, profil_id) VALUES (\"User\", \"Name\", DATE(1-1-2000), \"m\", 10115, @profil_id)";
-                cmd = new MySqlCommand(insertUser, con);
-                cmd.Parameters.AddWithValue("@profil_id", profileId);
-                cmd.ExecuteNonQuery();
-                long userId = cmd.LastInsertedId;
+                // 3. User
+                const string insertUser = @"
+            INSERT INTO `User` (firstname, lastname, birthday, gender, profil_id)
+            VALUES (@firstname, @lastname, @birthday, @gender, @profil_id)";
+                var cmdUser = new MySqlCommand(insertUser, con, trans);
+                cmdUser.Parameters.AddWithValue("@firstname", "User");
+                cmdUser.Parameters.AddWithValue("@lastname", "Name");
+                cmdUser.Parameters.AddWithValue("@birthday", new DateTime(2000, 1, 1));
+                cmdUser.Parameters.AddWithValue("@gender", "m");
+                cmdUser.Parameters.AddWithValue("@profil_id", profileId);
+                cmdUser.ExecuteNonQuery();
+                long userId = cmdUser.LastInsertedId;
 
-                DebugHandler.Log($"Wrote new User in {cmd.LastInsertedId}.");
+                DebugHandler.Log($"Inserted User (id={userId}).");
 
-                string insertLogin = "INSERT INTO Login (user_id, email, password) VALUES (@user_id, @email, @password)";
-                cmd = new MySqlCommand(insertLogin, con);
-                cmd.Parameters.AddWithValue("@user_id", userId);
-                cmd.Parameters.AddWithValue("@email", userEmail);
-                cmd.Parameters.AddWithValue("@password", userPassword); // besser: vorher hashen! (Mache ich sicher später)
-                cmd.ExecuteNonQuery();
-                long loginId = cmd.LastInsertedId;
+                // 4. Login
+                const string insertLogin = @"
+            INSERT INTO Login (user_id, email, password)
+            VALUES (@user_id, @email, @password)";
+                var cmdLogin = new MySqlCommand(insertLogin, con, trans);
+                cmdLogin.Parameters.AddWithValue("@user_id", userId);
+                cmdLogin.Parameters.AddWithValue("@email", userEmail.ToLower());
 
-                /*
-                 * using BCrypt.Net;
-                 * string hash = BCrypt.HashPassword("meinPasswort");
-                 * 
-                 * bool isValid = BCrypt.Verify(eingegebenesPasswort, gespeicherterHash);
-                 */
+                // TODO: Passwort hashen lassen
+                // string hash = BCrypt.Net.BCrypt.HashPassword(userPassword);
+                // cmdLogin.Parameters.AddWithValue("@password", hash);
+                cmdLogin.Parameters.AddWithValue("@password", userPassword);
 
-                DebugHandler.Log($"Wrote new Login in {cmd.LastInsertedId}.");
-                con.Close();
+                cmdLogin.ExecuteNonQuery();
+                long loginId = cmdLogin.LastInsertedId;
+
+                DebugHandler.Log($"Inserted Login (id={loginId}).");
+
+                // Commit Transaction
+                trans.Commit();
+
                 return new Login(userId, loginId, LoginStates.NewUser);
             }
-            catch
+            catch (Exception ex)
             {
-                DebugHandler.Log("Error while writing new Login. Please check the Database!!!");
-                con.Close();
-                return new Login(-1,-1, LoginStates.Error);
+                try { trans.Rollback(); } catch { /* ignore rollback errors */ } // Damit der alte Fehler nicht überschrieben wird.
+                DebugHandler.Log($"DB-Error in SaveLogin(): {ex.Message}");
+                return Login.Error();
             }
         }
     }
@@ -202,6 +216,11 @@ namespace BananaLove.Utility
             UserID = userID;
             LoginID = loginID;
             State = state;
+        }
+
+        public static Login Error(DBHandler.LoginStates error = DBHandler.LoginStates.Error)
+        {
+            return new Login(-1, -1, error);
         }
     }
 }
