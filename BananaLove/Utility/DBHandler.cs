@@ -44,6 +44,27 @@ namespace BananaLove.Utility
             return new MySqlConnection(connectionString);
         }
 
+        public static bool EmailExists(string userEmail)
+        {
+            var con = connect();
+            con.Open();
+            
+            string query = $"SELECT id, user_id, email, password FROM `Login` WHERE `email` = @userEmail";
+            var cmd = new MySqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@userEmail", userEmail);
+
+            var reader = cmd.ExecuteReader();
+
+            if (reader.Read())
+            {
+                con.Close();
+                return true;
+            }
+
+            con.Close();
+            return false;
+        }
+
         public static bool TestConnection()
         {
             try
@@ -62,7 +83,7 @@ namespace BananaLove.Utility
             }
             catch (Exception e)
             {
-                DebugHandler.Log("Error while connecting to Database!" + e.Message);
+                DebugHandler.LogError("Error while connecting to Database!" + e.Message);
                 return false;
             }
         }
@@ -73,25 +94,23 @@ namespace BananaLove.Utility
             var con = connect();
             con.Open();
 
-            var email = Utility.IsValidEmail(userEmail);
-
-            if (!email)
+            if (!Utility.IsValidEmail(userEmail))
             {
-                DebugHandler.Log("SaveLogin called with invalid email format.");
-                return Login.Error();
+                DebugHandler.LogError("SaveLogin called with invalid email format.");
+                return Login.Error(LoginStates.EmailNotFound);
             }
 
             try
             {
-                string query = "SELECT id, user_id, email, password FROM `Login` WHERE `email` = @userEmail";
+                string query = $"SELECT id, user_id, email, password FROM `Login` WHERE `email` = @userEmail";
                 var cmd = new MySqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@userEmail", email);
+                cmd.Parameters.AddWithValue("@userEmail", userEmail);
 
                 var reader = cmd.ExecuteReader();
 
                 if (!reader.Read())
                 {
-                    DebugHandler.Log("Login failed: Email not found.");
+                    DebugHandler.LogError("Login failed: Email not found.");
                     return Login.Error(LoginStates.EmailNotFound);
                 }
 
@@ -103,7 +122,7 @@ namespace BananaLove.Utility
                 if (storedHash == userPassword)
                 {
                     DebugHandler.Log($"Login successful for user_id={userId}.");
-                    return Login.Error(LoginStates.ExistingUser);
+                    return new Login(userId, loginId, LoginStates.ExistingUser);
                 }
 
                 // Wenn schon bcrypt benutzt wird (Mach ich safe bald):
@@ -115,12 +134,12 @@ namespace BananaLove.Utility
                 }
                 */
 
-                DebugHandler.Log("Login failed: Wrong password.");
+                DebugHandler.LogError("Login failed: Wrong password.");
                 return Login.Error(LoginStates.PasswordIncorrect);
             }
             catch (Exception ex)
             {
-                DebugHandler.Log($"DB-Error during login: {ex.Message}");
+                DebugHandler.LogError($"DB-Error during login: {ex.Message}");
                 return Login.Error();
             }
         }
@@ -131,13 +150,19 @@ namespace BananaLove.Utility
 
             if (string.IsNullOrWhiteSpace(userEmail) || string.IsNullOrWhiteSpace(userPassword))
             {
-                DebugHandler.Log("SaveLogin called with empty email or password.");
+                DebugHandler.LogError("SaveLogin() called with empty email or password.");
                 return Login.Error();
             }
-            var email = Utility.IsValidEmail(userEmail);
-            if (!email)
+
+            if (!Utility.IsValidEmail(userEmail))
             {
-                DebugHandler.Log("SaveLogin called with invalid email format.");
+                DebugHandler.LogError("SaveLogin() called with invalid email format.");
+                return Login.Error(LoginStates.EmailNotFound);
+            }
+
+            if (EmailExists(userEmail))
+            {
+                DebugHandler.LogError("Email for SaveLogin() already exists.");
                 return Login.Error();
             }
 
@@ -195,7 +220,7 @@ namespace BananaLove.Utility
             VALUES (@user_id, @email, @password)";
                 var cmdLogin = new MySqlCommand(insertLogin, con, trans);
                 cmdLogin.Parameters.AddWithValue("@user_id", userId);
-                cmdLogin.Parameters.AddWithValue("@email", email);
+                cmdLogin.Parameters.AddWithValue("@email", userEmail);
 
                 // TODO: Passwort hashen lassen
                 // string hash = BCrypt.Net.BCrypt.HashPassword(userPassword);
@@ -215,7 +240,7 @@ namespace BananaLove.Utility
             catch (Exception ex)
             {
                 try { trans.Rollback(); } catch { /* ignore rollback errors */ } // Damit der alte Fehler nicht überschrieben wird.
-                DebugHandler.Log($"DB-Error in SaveLogin(): {ex.Message}");
+                DebugHandler.LogError($"DB-Error in SaveLogin(): {ex.Message}");
                 return Login.Error();
             }
         }
@@ -223,8 +248,8 @@ namespace BananaLove.Utility
 
     public class Login
     {
-        long UserID, LoginID;
-        DBHandler.LoginStates State;
+        public long UserID, LoginID;
+        public DBHandler.LoginStates State;
 
         public Login(long userID, long loginID, DBHandler.LoginStates state)
         {
@@ -248,7 +273,7 @@ namespace BananaLove.Utility
                 var addr = new MailAddress(email);
                 return addr.Address == email;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }

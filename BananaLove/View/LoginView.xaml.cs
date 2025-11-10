@@ -60,14 +60,24 @@ namespace BananaLove.View
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            var a = DBHandler.TryLogin(txtMail.Text, txtPass.Password);
-            openMainWindow();
+            Login a = DBHandler.TryLogin(txtMail.Text, txtPass.Password);
+            if (!new List<DBHandler.LoginStates> {
+                DBHandler.LoginStates.EmailNotFound,
+                DBHandler.LoginStates.Error,
+                DBHandler.LoginStates.PasswordIncorrect
+            }.Contains(a.State))
+                openMainWindow();
         }
 
         private void Signup_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var a = DBHandler.SaveLogin(txtMail.Text, txtPass.Password);
-            openSignupWindow();
+            if (!new List<DBHandler.LoginStates> { 
+                DBHandler.LoginStates.EmailNotFound, 
+                DBHandler.LoginStates.Error, 
+                DBHandler.LoginStates.PasswordIncorrect 
+            }.Contains(a.State))
+                    openSignupWindow();
         }
     }
 }
