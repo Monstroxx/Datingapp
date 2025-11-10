@@ -14,14 +14,9 @@
         MouseDown="Window_MouseDown"
         >
     <Border CornerRadius="12">
-        <Border.Background>
-            <ImageBrush ImageSource="/Images/nebula.png"
-                        Stretch="None"/>
-        </Border.Background>
-
         <Border CornerRadius="10"
             BorderThickness="1"
-            Opacity="0.8"
+            Opacity="1"
             >
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -402,6 +397,7 @@
                                             <Style TargetType="DatePickerTextBox">
                                                 <Setter Property="Foreground" Value="White"/>
                                                 <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="BorderBrush" Value="Transparent"/>
                                                 <Setter Property="BorderThickness" Value="0"/>
                                                 <Setter Property="Padding" Value="5,0,0,0"/>
                                             </Style>
@@ -668,6 +664,7 @@
                                      FontWeight="Medium"
                                      FontFamily="Montserrat"
                                      Foreground="White"
+                                     Background="Transparent"
                                      CaretBrush="LightGray"
                                      BorderBrush="DarkGray"
                                      BorderThickness="0,0,0,1"
