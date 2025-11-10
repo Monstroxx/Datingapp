@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.JavaScript;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
+using System.Net.Mail;
 
 namespace BananaLove.Utility
 {
@@ -72,11 +73,19 @@ namespace BananaLove.Utility
             var con = connect();
             con.Open();
 
+            var email = Utility.IsValidEmail(userEmail);
+
+            if (!email)
+            {
+                DebugHandler.Log("SaveLogin called with invalid email format.");
+                return Login.Error();
+            }
+
             try
             {
                 string query = "SELECT id, user_id, email, password FROM `Login` WHERE `email` = @userEmail";
                 var cmd = new MySqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@userEmail", userEmail);
+                cmd.Parameters.AddWithValue("@userEmail", email);
 
                 var reader = cmd.ExecuteReader();
 
@@ -123,6 +132,12 @@ namespace BananaLove.Utility
             if (string.IsNullOrWhiteSpace(userEmail) || string.IsNullOrWhiteSpace(userPassword))
             {
                 DebugHandler.Log("SaveLogin called with empty email or password.");
+                return Login.Error();
+            }
+            var email = Utility.IsValidEmail(userEmail);
+            if (!email)
+            {
+                DebugHandler.Log("SaveLogin called with invalid email format.");
                 return Login.Error();
             }
 
@@ -180,7 +195,7 @@ namespace BananaLove.Utility
             VALUES (@user_id, @email, @password)";
                 var cmdLogin = new MySqlCommand(insertLogin, con, trans);
                 cmdLogin.Parameters.AddWithValue("@user_id", userId);
-                cmdLogin.Parameters.AddWithValue("@email", userEmail.ToLower());
+                cmdLogin.Parameters.AddWithValue("@email", email);
 
                 // TODO: Passwort hashen lassen
                 // string hash = BCrypt.Net.BCrypt.HashPassword(userPassword);
@@ -223,4 +238,21 @@ namespace BananaLove.Utility
             return new Login(-1, -1, error);
         }
     }
+
+    public static class Utility
+    {
+        public static bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    }
+
 }
