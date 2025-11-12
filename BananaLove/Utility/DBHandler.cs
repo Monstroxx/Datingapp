@@ -186,6 +186,17 @@ namespace BananaLove.Utility
                 long addressId = cmdAddress.LastInsertedId;
 
                 DebugHandler.Log($"Inserted Address (id={addressId}).");
+                
+                // 1.1 Preferences
+
+                const string insertPreference = @"
+            INSERT INTO Preference (prefers, search_radius)
+            VALUES (@prefers, @search_radius);";
+                var cmdPreferences = new MySqlCommand(insertPreference, con, trans);
+                cmdPreferences.Parameters.AddWithValue("@prefers", "d");
+                cmdPreferences.Parameters.AddWithValue("@search_radius", 20);
+                cmdPreferences.ExecuteNonQuery();
+                long pref_id = cmdPreferences.LastInsertedId;
 
                 // 2. Profile
                 const string insertProfile = @"
@@ -203,14 +214,15 @@ namespace BananaLove.Utility
 
                 // 3. User
                 const string insertUser = @"
-            INSERT INTO `User` (firstname, lastname, birthday, gender, profil_id)
-            VALUES (@firstname, @lastname, @birthday, @gender, @profil_id)";
+            INSERT INTO `User` (firstname, lastname, birthday, gender, profil_id, preference_id)
+            VALUES (@firstname, @lastname, @birthday, @gender, @profil_id, @preference_id)";
                 var cmdUser = new MySqlCommand(insertUser, con, trans);
                 cmdUser.Parameters.AddWithValue("@firstname", "User");
                 cmdUser.Parameters.AddWithValue("@lastname", "Name");
                 cmdUser.Parameters.AddWithValue("@birthday", new DateTime(2000, 1, 1));
                 cmdUser.Parameters.AddWithValue("@gender", "m");
                 cmdUser.Parameters.AddWithValue("@profil_id", profileId);
+                cmdUser.Parameters.AddWithValue("@preference_id", pref_id);
                 cmdUser.ExecuteNonQuery();
                 long userId = cmdUser.LastInsertedId;
 
