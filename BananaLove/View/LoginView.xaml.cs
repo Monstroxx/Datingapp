@@ -30,8 +30,8 @@ namespace BananaLove.View
 
         public void openMainWindow()
         {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
+            MainView mainView = new MainView();
+            mainView.Show();
             this.Close();
         }
         public void openSignupWindow()
