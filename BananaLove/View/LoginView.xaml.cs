@@ -21,7 +21,7 @@ namespace BananaLove.View
     /// </summary>
     public partial class LoginView : Window
     {
-        Login login;
+        public Login LoginData;
         public LoginView()
         {
             InitializeComponent();
@@ -48,24 +48,24 @@ namespace BananaLove.View
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            login = DBHandler.TryLogin(txtMail.Text, txtPass.Password);
+            LoginData = DBHandler.TryLogin(txtMail.Text, txtPass.Password);
             if (!new List<DBHandler.LoginStates> {
                 DBHandler.LoginStates.EmailNotFound,
                 DBHandler.LoginStates.Error,
                 DBHandler.LoginStates.PasswordIncorrect
-            }.Contains(login.State))
-                openMainWindow();
+            }.Contains(LoginData.State))
+                ViewHandler.openMainWindow(true, this);
         }
 
         private void Signup_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            login = DBHandler.SaveLogin(txtMail.Text, txtPass.Password, txtUser.Text);
+            LoginData = DBHandler.SaveLogin(txtMail.Text, txtPass.Password, txtUser.Text);
             if (!new List<DBHandler.LoginStates> { 
                 DBHandler.LoginStates.EmailNotFound, 
                 DBHandler.LoginStates.Error, 
                 DBHandler.LoginStates.PasswordIncorrect 
-            }.Contains(login.State))
-                    openSignupWindow();
+            }.Contains(LoginData.State))
+                    ViewHandler.openPreferenceWindow(true, this);
         }
     }
 }
