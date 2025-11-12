@@ -71,7 +71,7 @@ namespace BananaLove.View
 
         private void Signup_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var a = DBHandler.SaveLogin(txtMail.Text, txtPass.Password);
+            var a = DBHandler.SaveLogin(txtMail.Text, txtPass.Password, txtUser.Text);
             if (!new List<DBHandler.LoginStates> { 
                 DBHandler.LoginStates.EmailNotFound, 
                 DBHandler.LoginStates.Error, 
