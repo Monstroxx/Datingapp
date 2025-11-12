@@ -48,7 +48,7 @@ namespace BananaLove.Utility
         {
             var con = connect();
             con.Open();
-            
+
             string query = "SELECT id, user_id, email, password FROM `Login` WHERE `email` = @userEmail";
             var cmd = new MySqlCommand(query, con);
             cmd.Parameters.AddWithValue("@userEmail", userEmail);
@@ -144,7 +144,7 @@ namespace BananaLove.Utility
             }
         }
 
-        public static Login SaveLogin(string userEmail, string userPassword, string userName = "")
+        public static Login SaveLogin(string userEmail, string userPassword, string userName = "User")
         {
             DebugHandler.seperate();
 
@@ -246,9 +246,117 @@ namespace BananaLove.Utility
             }
         }
 
-        public static bool UpdateUserData()
+        public static bool UpdateUserData(
+            long userId,
+            string street,
+            string houseNumber,
+            string city,
+            int postal,
+            string gender,
+            DateTime birthday,
+            string prefers,      // "m", "w", "d"
+            int searchRadius,
+            string firstname,
+            string lastname,
+            string bio,
+            string username = "UpdatedUser"
+        )
         {
-            return false;
+            using (var con = connect())
+            {
+                con.Open();
+                var trans = con.BeginTransaction();
+
+                try
+                {
+                    // 1. IDs des Nutzers abrufen (Profil, Adresse, Preference)
+                    const string getIdsQuery = @"
+                SELECT 
+                    p.id AS profil_id,
+                    a.id AS address_id,
+                    pref.id AS preference_id
+                FROM User u
+                JOIN Profil p ON u.profil_id = p.id
+                JOIN Address a ON p.address_id = a.id
+                JOIN Preference pref ON u.preference_id = pref.id
+                WHERE u.id = @userId";
+                    var cmdGet = new MySqlCommand(getIdsQuery, con, trans);
+                    cmdGet.Parameters.AddWithValue("@userId", userId);
+                    long profilId = -1, addressId = -1, prefId = -1;
+
+                    using (var reader = cmdGet.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            profilId = reader.GetInt64("profil_id");
+                            addressId = reader.GetInt64("address_id");
+                            prefId = reader.GetInt64("preference_id");
+                        }
+                        else
+                        {
+                            throw new Exception($"Kein Benutzer mit ID {userId} gefunden.");
+                        }
+                    }
+
+                    // 2. Adresse updaten
+                    const string updateAddress = @"
+                UPDATE Address 
+                SET street=@street, number=@number, city=@city, postal=@postal
+                WHERE id=@id";
+                    var cmdAddress = new MySqlCommand(updateAddress, con, trans);
+                    cmdAddress.Parameters.AddWithValue("@street", street);
+                    cmdAddress.Parameters.AddWithValue("@number", houseNumber);
+                    cmdAddress.Parameters.AddWithValue("@city", city);
+                    cmdAddress.Parameters.AddWithValue("@postal", postal);
+                    cmdAddress.Parameters.AddWithValue("@id", addressId);
+                    cmdAddress.ExecuteNonQuery();
+
+                    // 3. Profil updaten
+                    const string updateProfile = @"
+                UPDATE Profil
+                SET user_name=@user_name, bio=@bio
+                WHERE id=@id";
+                    var cmdProfile = new MySqlCommand(updateProfile, con, trans);
+                    cmdProfile.Parameters.AddWithValue("@user_name", username);
+                    cmdProfile.Parameters.AddWithValue("@bio", bio);
+                    cmdProfile.Parameters.AddWithValue("@id", profilId);
+                    cmdProfile.ExecuteNonQuery();
+
+                    // 4. Preference updaten
+                    const string updatePreference = @"
+                UPDATE Preference
+                SET prefers=@prefers, search_radius=@search_radius
+                WHERE id=@id";
+                    var cmdPref = new MySqlCommand(updatePreference, con, trans);
+                    cmdPref.Parameters.AddWithValue("@prefers", prefers);
+                    cmdPref.Parameters.AddWithValue("@search_radius", searchRadius);
+                    cmdPref.Parameters.AddWithValue("@id", prefId);
+                    cmdPref.ExecuteNonQuery();
+
+                    // 5. User updaten
+                    const string updateUser = @"
+                UPDATE User
+                SET firstname=@firstname, lastname=@lastname, birthday=@birthday, gender=@gender
+                WHERE id=@userId";
+                    var cmdUser = new MySqlCommand(updateUser, con, trans);
+                    cmdUser.Parameters.AddWithValue("@firstname", firstname);
+                    cmdUser.Parameters.AddWithValue("@lastname", lastname);
+                    cmdUser.Parameters.AddWithValue("@birthday", birthday);
+                    cmdUser.Parameters.AddWithValue("@gender", gender);
+                    cmdUser.Parameters.AddWithValue("@userId", userId);
+                    cmdUser.ExecuteNonQuery();
+
+                    trans.Commit();
+                    DebugHandler.Log($"User data successfully updated for user_id={userId}");
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    DebugHandler.LogError($"DB-Error in UpdateUserData(): {ex.Message}");
+                    try { trans.Rollback(); } catch { }
+                    return false;
+                }
+            }
         }
     }
 

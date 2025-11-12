@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BananaLove.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,8 +20,10 @@ namespace BananaLove.View
     /// </summary>
     public partial class MainView : Window
     {
-        public MainView()
+        Login login;
+        public MainView(Login login_data)
         {
+            login = login_data;
             InitializeComponent();
         }
 
@@ -61,7 +64,7 @@ namespace BananaLove.View
         private void btnProfile_Click(object sender, RoutedEventArgs e)
         {
             // TODO: Implement profile view functionality
-            PreferenceView preferenceView = new PreferenceView();
+            PreferenceView preferenceView = new PreferenceView(login);
             preferenceView.Show();
         }
 

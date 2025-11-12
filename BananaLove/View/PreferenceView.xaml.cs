@@ -1,3 +1,4 @@
+using BananaLove.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +21,10 @@ namespace BananaLove.View
     /// </summary>
     public partial class PreferenceView : Window
     {
-        public PreferenceView()
+        Login login;
+        public PreferenceView(Login login_data)
         {
+            login = login_data;
             InitializeComponent();
         }
 
@@ -109,6 +112,50 @@ namespace BananaLove.View
             // - dpBirthday.SelectedDate
             // - Selected preference gender from btnPreferenceFemale/Male/Other
             // - sliderRadius.Value
+            string selectedGender = "";
+            if (btnGenderFemale.IsChecked == true) { selectedGender = "w"; }
+            else if (btnGenderMale.IsChecked == true) { selectedGender = "m"; }
+            else if (btnGenderOther.IsChecked == true) { selectedGender = "d"; }
+
+            string selectedPreferenceGender = "";
+            if (btnPreferenceFemale.IsChecked == true) { selectedPreferenceGender = "w"; }
+            else if (btnPreferenceMale.IsChecked == true) { selectedPreferenceGender = "m"; }
+            else if (btnPreferenceOther.IsChecked == true) { selectedPreferenceGender = "d"; }
+            
+            int postalCode = 0;
+            try { postalCode = int.Parse(txtPostalCode.Text); }
+            catch (Exception)
+            {
+                MessageBox.Show("Bitte geben Sie eine gültige Postleitzahl ein.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            DateTime birthday;
+
+            if (dpBirthday.SelectedDate != null)
+            {
+                birthday = (DateTime)dpBirthday.SelectedDate;
+            }
+            else
+            {
+                MessageBox.Show("Bitte wählen Sie ein gültiges Geburtsdatum aus.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            DBHandler.UpdateUserData(
+                    login.UserID,
+                    txtStreet.Text,
+                    txtHouseNumber.Text,
+                    txtCity.Text,
+                    postalCode,
+                    selectedGender,
+                    birthday,
+                    selectedPreferenceGender,
+                    (int)sliderRadius.Value,
+                    txtFirstName.Text,
+                    txtLastName.Text,
+                    txtBio.Text
+                );
 
             MessageBox.Show("Einstellungen gespeichert!", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
         }
