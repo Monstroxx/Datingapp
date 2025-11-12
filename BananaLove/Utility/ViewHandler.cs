@@ -10,7 +10,7 @@ namespace BananaLove.Utility
 {
     class ViewHandler
     {
-        public static bool ViewDebug = true; 
+        public static bool ViewDebug = false; 
 
         public static void openMainWindow(bool close, WindowView currentView)
         {

@@ -23,8 +23,10 @@ namespace BananaLove.View
     {
         public PreferenceView(Login loginData) : base(loginData)
         {
+            // Reihenfolge ist wichtig!
             LoginData = loginData;
             InitializeComponent();
+            LoadCurrentLogin();
         }
 
         public void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -164,6 +166,49 @@ namespace BananaLove.View
                 MessageBox.Show("Es gab einen Fehler in der Speicherung", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
+        }
+
+        private void LoadCurrentLogin()
+        {
+            try
+            {
+                var data = DBHandler.GetUserData(LoginData.UserID);
+
+                // Grunddaten
+                txtFirstName.Text = data["firstname"].ToString();
+                txtLastName.Text = data["lastname"].ToString();
+                txtBio.Text = data["bio"].ToString();
+
+                // Adresse
+                txtStreet.Text = data["street"].ToString();
+                txtHouseNumber.Text = data["number"].ToString();
+                txtCity.Text = data["city"].ToString();
+                txtPostalCode.Text = data["postal"].ToString();
+
+                // Geburtsdatum
+                dpBirthday.SelectedDate = (DateTime)data["birthday"];
+
+                // Geschlecht
+                string gender = data["gender"].ToString().ToLower();
+                btnGenderFemale.IsChecked = gender == "w";
+                btnGenderMale.IsChecked = gender == "m";
+                btnGenderOther.IsChecked = gender == "d";
+
+                // Vorlieben
+                string prefers = data["prefers"].ToString().ToLower();
+                btnPreferenceFemale.IsChecked = prefers == "w";
+                btnPreferenceMale.IsChecked = prefers == "m";
+                btnPreferenceOther.IsChecked = prefers == "d";
+
+                // Radius
+                sliderRadius.Value = Convert.ToInt32(data["search_radius"]);
+
+                DebugHandler.Log($"Loaded user data for ID {LoginData.UserID}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Fehler beim Laden der Nutzerdaten: {ex.Message}", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

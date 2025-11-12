@@ -391,6 +391,61 @@ namespace BananaLove.Utility
             }
             return (result);
         }
+        
+        public static Dictionary<string, object> GetUserData(long userId)
+        {
+            var result = new Dictionary<string, object>();
+
+            using (var con = connect())
+            {
+                con.Open();
+
+                const string query = @"
+            SELECT 
+                u.firstname, 
+                u.lastname, 
+                u.birthday, 
+                u.gender,
+                p.user_name, 
+                p.bio,
+                a.street, 
+                a.number, 
+                a.city, 
+                a.postal,
+                pref.prefers, 
+                pref.search_radius
+            FROM User u
+            JOIN Profil p ON u.profil_id = p.id
+            JOIN Address a ON p.address_id = a.id
+            JOIN Preference pref ON u.preference_id = pref.id
+            WHERE u.id = @userId";
+
+                var cmd = new MySqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@userId", userId);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read())
+                        throw new Exception($"Kein Benutzer mit ID {userId} gefunden.");
+
+                    result["firstname"] = reader["firstname"]?.ToString() ?? "";
+                    result["lastname"] = reader["lastname"]?.ToString() ?? "";
+                    result["birthday"] = reader.GetDateTime("birthday");
+                    result["gender"] = reader["gender"]?.ToString() ?? "";
+                    result["user_name"] = reader["user_name"]?.ToString() ?? "";
+                    result["bio"] = reader["bio"]?.ToString() ?? "";
+                    result["street"] = reader["street"]?.ToString() ?? "";
+                    result["number"] = reader["number"]?.ToString() ?? "";
+                    result["city"] = reader["city"]?.ToString() ?? "";
+                    result["postal"] = Convert.ToInt32(reader["postal"]);
+                    result["prefers"] = reader["prefers"]?.ToString() ?? "";
+                    result["search_radius"] = Convert.ToInt32(reader["search_radius"]);
+                }
+            }
+
+            return result;
+        }
+
     }
 
     public class Login
