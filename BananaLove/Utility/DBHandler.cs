@@ -380,6 +380,7 @@ namespace BananaLove.Utility
             var cmd = new MySqlCommand(query, con);
             cmd.Parameters.AddWithValue("@target", "%" + target + "%");
             var reader = cmd.ExecuteReader();
+            DebugHandler.seperate();
             while (reader.Read())
             {
                 DebugHandler.Log($"Found User: id={reader.GetInt64("id")}, user_name={reader.GetString("user_name")}, bio={reader.GetString("bio")}");
