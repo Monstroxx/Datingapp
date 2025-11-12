@@ -83,8 +83,52 @@ namespace BananaLove.View
         {
             if (e.Key == Key.Enter)
             {
-                DBHandler.searchUsers(txtSearch.Text);
+                var searchResults = DBHandler.searchUsers(txtSearch.Text);
+                LoadProfileListView(searchResults);
             }
+        }
+
+        private void LoadProfileListView(List<string> searchResults)
+        {
+            // Finde das contentGrid (falls es noch nicht generiert wurde, verwende FindName)
+            Grid grid = contentGrid ?? (Grid)this.FindName("contentGrid");
+            
+            if (grid == null)
+            {
+                MessageBox.Show("Fehler: contentGrid konnte nicht gefunden werden.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Lösche vorherige Inhalte
+            grid.Children.Clear();
+
+            // Erstelle ProfileListView
+            ProfileListView profileListView = new ProfileListView();
+
+            // Konvertiere die Suchergebnisse in ProfileCard-Objekte
+            // searchResults enthält: [id1, username1, bio1, id2, username2, bio2, ...]
+            List<ProfileListView.ProfileCard> profiles = new List<ProfileListView.ProfileCard>();
+            
+            for (int i = 0; i < searchResults.Count; i += 3)
+            {
+                if (i + 2 < searchResults.Count)
+                {
+                    profiles.Add(new ProfileListView.ProfileCard
+                    {
+                        UserId = long.Parse(searchResults[i]),
+                        Username = searchResults[i + 1],
+                        Bio = searchResults[i + 2],
+                        Name = searchResults[i + 1], // Verwende Username als Name, bis wir den echten Namen haben
+                        ImagePath = "/Images/icons8-männlicher-benutzer-eingekreist-48.png" // Placeholder
+                    });
+                }
+            }
+
+            // Lade Profile in die View
+            profileListView.LoadProfiles(profiles);
+
+            // Füge die View zum Grid hinzu
+            grid.Children.Add(profileListView);
         }
     }
 }

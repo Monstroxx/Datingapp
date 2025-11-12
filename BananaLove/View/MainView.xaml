@@ -91,13 +91,8 @@
                 </Grid>
 
                 <!-- Main Content (placeholder for cards/profiles) -->
-                <Grid Grid.Row="1" Margin="20,0,20,20">
+                <Grid x:Name="contentGrid" Grid.Row="1" Margin="20,0,20,20">
                     <!-- Hier kommen später die Profil-Karten hin -->
-                    <Image 
-                           Stretch="Uniform"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           />
 
 
                 </Grid>
