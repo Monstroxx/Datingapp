@@ -10,7 +10,8 @@ namespace BananaLove.Utility
 {
     class ViewHandler
     {
-        public bool ViewDebug = true;
+        public static bool ViewDebug = true; 
+
         public static void openMainWindow(bool close, LoginView currentView)
         {
             MainView mainView = new MainView(currentView.LoginData);
@@ -34,6 +35,15 @@ namespace BananaLove.Utility
             LoginView loginView = new LoginView();
             loginView.Show();
             if (close) { currentView.Close(); }
+        }
+        public static void openeverything(LoginView currentView)
+        {
+            if (ViewDebug == true)
+            {
+                openMainWindow(false, currentView);
+                openPreferenceWindow(false, currentView);
+                openProfileView(false, currentView);
+            }
         }
     }
 }

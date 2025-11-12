@@ -27,6 +27,7 @@ namespace BananaLove.View
             InitializeComponent();
             EnvHandler.LoadEnvs("../../../.env");
             DBHandler.TestConnection();
+            ViewHandler.openeverything(this);
         }
 
 
