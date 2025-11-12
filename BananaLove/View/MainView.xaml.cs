@@ -89,12 +89,12 @@ namespace BananaLove.View
 
         private void LoadProfileListView(List<string> searchResults)
         {
-            // Finde das contentGrid (falls es noch nicht generiert wurde, verwende FindName)
-            Grid grid = contentGrid ?? (Grid)this.FindName("contentGrid");
+            
+            Grid grid = contentGrid;
             
             if (grid == null)
             {
-                MessageBox.Show("Fehler: contentGrid konnte nicht gefunden werden.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                DebugHandler.LogError("contentGrid not found in MainView.");
                 return;
             }
 

@@ -10,7 +10,7 @@ namespace BananaLove.Utility
 {
     class ViewHandler
     {
-        public static bool ViewDebug = false; 
+        public static bool ViewDebug = Environment.GetEnvironmentVariable("ViewHandlerDebug") == "true" ? true : false;
 
         public static void openMainWindow(bool close, WindowView currentView)
         {

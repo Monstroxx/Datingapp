@@ -10,7 +10,7 @@ namespace BananaLove.Utility
 {
     class DebugHandler
     {
-        public static bool isDebugMode = true;
+        public static bool isDebugMode = Environment.GetEnvironmentVariable("DebugHandler") == "true" ? true : false;
         
         static string time {get{ return DateTime.Now.ToString("HH:mm:ss.fff"); }}
 public static void Log(string message)
