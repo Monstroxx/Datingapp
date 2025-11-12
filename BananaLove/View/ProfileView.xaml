@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BananaLove.View"
         mc:Ignorable="d"
-        Title="ProfileView" Height="600" Width="800"
+        Title="ProfileView" Height="700" Width="1300"
         WindowStyle="None"
         ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
@@ -45,6 +45,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="25"/>
                         <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="25"/>
                         <ColumnDefinition Width="5"/>
                     </Grid.ColumnDefinitions>
 
@@ -81,8 +82,41 @@
                         </Button.Template>
                     </Button>
 
-                    <Button x:Name="btnClose"
+                    <Button x:Name="btnMaximize"
                             Grid.Column="2"
+                            BorderThickness="0"
+                            Content="□"
+                            Foreground="White"
+                            FontSize="14"
+                            FontFamily="Montserrat"
+                            Cursor="Hand"
+                            Click="btnMaximize_Click">
+
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#462AD8"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#28AEED"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="18" Height="18"
+                                        CornerRadius="9"
+                                        Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <Button x:Name="btnClose"
+                            Grid.Column="3"
                             BorderThickness="0"
                             Content="X"
                             Foreground="White"
@@ -125,7 +159,7 @@
                     <!-- Left Section: Profile Picture -->
                     <Border Grid.Column="0"
                             Background="#E0E0E0"
-                            Margin="10,0,0,10">
+                            Margin="10,-22,0,7">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
