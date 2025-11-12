@@ -1,5 +1,7 @@
-﻿using System;
+﻿using BananaLove.Utility;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -79,25 +81,8 @@ namespace BananaLove.View
         {
             if (e.Key == Key.Enter)
             {
-                PerformSearch();
+                DBHandler.searchUsers(txtSearch.Text);
             }
-        }
-
-        private void PerformSearch()
-        {
-            string searchQuery = txtSearch.Text?.Trim();
-            
-            if (string.IsNullOrEmpty(searchQuery))
-            {
-                // TODO: Alle Profile anzeigen
-                return;
-            }
-
-            // TODO: Implementiere Suchlogik
-            // z.B. Profile nach Name, Bio, etc. durchsuchen
-            // und Ergebnisse in der MainView anzeigen
-            
-            MessageBox.Show($"Suche nach: {searchQuery}", "Suche", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

@@ -26,21 +26,27 @@ namespace BananaLove.View
             InitializeComponent();
             EnvHandler.LoadEnvs("../../../.env");
             DBHandler.TestConnection();
+            if (DebugHandler.isDebugMode == true)
+            {
+                Debug.WriteLine("Debug Mode: Bypassing login.");
+                openMainWindow(false);
+                openSignupWindow(false);
+                return;
+            }
         }
 
-        public void openMainWindow()
+        public void openMainWindow(bool close)
         {
             MainView mainView = new MainView();
             mainView.Show();
-            this.Close();
+            if (close) { this.Close(); }
         }
-        public void openSignupWindow()
+        public void openSignupWindow(bool close)
         {
             // PreferenceView öffnen
             PreferenceView preferenceView = new PreferenceView();
             preferenceView.Show();
-
-            this.Close();
+            if (close) { this.Close(); }
         }
         public void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -66,7 +72,7 @@ namespace BananaLove.View
                 DBHandler.LoginStates.Error,
                 DBHandler.LoginStates.PasswordIncorrect
             }.Contains(a.State))
-                openMainWindow();
+                openMainWindow(true);
         }
 
         private void Signup_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -77,7 +83,7 @@ namespace BananaLove.View
                 DBHandler.LoginStates.Error, 
                 DBHandler.LoginStates.PasswordIncorrect 
             }.Contains(a.State))
-                    openSignupWindow();
+                    openSignupWindow(true);
         }
     }
 }
