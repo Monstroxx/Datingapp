@@ -49,7 +49,7 @@ namespace BananaLove.Utility
             var con = connect();
             con.Open();
             
-            string query = $"SELECT id, user_id, email, password FROM `Login` WHERE `email` = @userEmail";
+            string query = "SELECT id, user_id, email, password FROM `Login` WHERE `email` = @userEmail";
             var cmd = new MySqlCommand(query, con);
             cmd.Parameters.AddWithValue("@userEmail", userEmail);
 
@@ -144,7 +144,7 @@ namespace BananaLove.Utility
             }
         }
 
-        public static Login SaveLogin(string userEmail, string userPassword)
+        public static Login SaveLogin(string userEmail, string userPassword, string userName = "")
         {
             DebugHandler.seperate();
 
@@ -188,9 +188,10 @@ namespace BananaLove.Utility
 
                 // 2. Profile
                 const string insertProfile = @"
-            INSERT INTO Profil (bio, picture, address_id)
-            VALUES (@bio, @picture, @address_id)";
+            INSERT INTO Profil (bio, user_name, picture, address_id)
+            VALUES (@bio, @user_name, @picture, @address_id)";
                 var cmdProfile = new MySqlCommand(insertProfile, con, trans);
+                cmdProfile.Parameters.AddWithValue("@user_name", userName);
                 cmdProfile.Parameters.AddWithValue("@bio", "No Bio");
                 cmdProfile.Parameters.AddWithValue("@picture", "");
                 cmdProfile.Parameters.AddWithValue("@address_id", addressId);
@@ -243,6 +244,11 @@ namespace BananaLove.Utility
                 DebugHandler.LogError($"DB-Error in SaveLogin(): {ex.Message}");
                 return Login.Error();
             }
+        }
+
+        public static bool UpdateUserData()
+        {
+            return false;
         }
     }
 
