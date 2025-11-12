@@ -29,20 +29,7 @@ namespace BananaLove.View
             DBHandler.TestConnection();
         }
 
-        public void openMainWindow()
-        {
-            MainView mainView = new MainView(login);
-            mainView.Show();
-            this.Close();
-        }
-        public void openSignupWindow()
-        {
-            // PreferenceView öffnen
-            PreferenceView preferenceView = new PreferenceView(login);
-            preferenceView.Show();
 
-            this.Close();
-        }
         public void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)

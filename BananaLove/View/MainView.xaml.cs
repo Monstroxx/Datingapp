@@ -1,6 +1,7 @@
 ﻿using BananaLove.Utility;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -76,6 +77,14 @@ namespace BananaLove.View
         private void btnDislike_Click(object sender, RoutedEventArgs e)
         {
             // TODO: Implement dislike functionality
+        }
+
+        private void txtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                DBHandler.searchUsers(txtSearch.Text);
+            }
         }
     }
 }

@@ -65,11 +65,33 @@
                             Background="Transparent"
                             Cursor="Hand"
                             Click="btnMenu_Click"
-                            HorizontalAlignment="Left">
+                            HorizontalAlignment="Left"
+                            Margin="0,0,10,0">
                         <Image Source="/Images/icons8-menü-48.png"
                                Width="48"
                                Height="48"/>
                     </Button>
+
+                    <TextBox x:Name="txtSearch"
+                             Grid.Column="1"
+                             FontSize="13"
+                             FontWeight="Medium"
+                             FontFamily="Montserrat"
+                             Foreground="White"
+                             CaretBrush="LightGray"
+                             BorderBrush="DarkGray"
+                             BorderThickness="0,0,0,1"
+                             Height="28"
+                             VerticalContentAlignment="Center"
+                             Margin="0,10,624,10"
+                             Padding="25,0,0,0"
+                             KeyDown="txtSearch_KeyDown">
+                        <TextBox.Background>
+                            <ImageBrush ImageSource="/Images/icons8-suche-48.png"
+                                        Stretch="Uniform"
+                                        AlignmentX="Left"/>
+                        </TextBox.Background>
+                    </TextBox>
 
                     <Button x:Name="btnMinimize"
                             Grid.Column="2"

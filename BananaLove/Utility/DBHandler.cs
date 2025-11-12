@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Net.Mail;
+using System.Printing;
 
 namespace BananaLove.Utility
 {
@@ -358,6 +359,25 @@ namespace BananaLove.Utility
                 }
             }
         }
+        public static List<string> searchUsers(string target)
+        {
+            List<string> result = new List<string>();
+            var con = connect();
+            con.Open();
+            string query = "SELECT u.id, p.user_name, p.bio FROM `User` u JOIN `Profil` p ON u.profil_id = p.id WHERE p.user_name LIKE @target";
+            var cmd = new MySqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@target", "%" + target + "%");
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                DebugHandler.Log($"Found User: id={reader.GetInt64("id")}, user_name={reader.GetString("user_name")}, bio={reader.GetString("bio")}");
+                
+                result.Add(reader.GetInt64("id").ToString());
+                result.Add(reader.GetString("user_name"));
+                result.Add(reader.GetString("bio"));
+            }
+            return (result);
+        }
     }
 
     public class Login
@@ -377,6 +397,8 @@ namespace BananaLove.Utility
             return new Login(-1, -1, error);
         }
     }
+
+
 
     public static class Utility
     {
