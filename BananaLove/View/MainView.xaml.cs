@@ -21,10 +21,9 @@ namespace BananaLove.View
     /// </summary>
     public partial class MainView : WindowView
     {
-        Login login;
         public MainView(Login login_data)
         {
-            login = login_data;
+            LoginData = login_data;
             InitializeComponent();
         }
 
@@ -65,7 +64,7 @@ namespace BananaLove.View
         private void btnProfile_Click(object sender, RoutedEventArgs e)
         {
             // TODO: Implement profile view functionality
-            PreferenceView preferenceView = new PreferenceView(login);
+            PreferenceView preferenceView = new PreferenceView(LoginData);
             preferenceView.Show();
         }
 
