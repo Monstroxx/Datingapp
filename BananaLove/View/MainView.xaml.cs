@@ -74,5 +74,30 @@ namespace BananaLove.View
         {
             // TODO: Implement dislike functionality
         }
+
+        private void txtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                PerformSearch();
+            }
+        }
+
+        private void PerformSearch()
+        {
+            string searchQuery = txtSearch.Text?.Trim();
+            
+            if (string.IsNullOrEmpty(searchQuery))
+            {
+                // TODO: Alle Profile anzeigen
+                return;
+            }
+
+            // TODO: Implementiere Suchlogik
+            // z.B. Profile nach Name, Bio, etc. durchsuchen
+            // und Ergebnisse in der MainView anzeigen
+            
+            MessageBox.Show($"Suche nach: {searchQuery}", "Suche", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }
