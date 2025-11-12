@@ -142,7 +142,7 @@ namespace BananaLove.View
                 return;
             }
 
-            DBHandler.UpdateUserData(
+            if (DBHandler.UpdateUserData(
                     login.UserID,
                     txtStreet.Text,
                     txtHouseNumber.Text,
@@ -155,9 +155,15 @@ namespace BananaLove.View
                     txtFirstName.Text,
                     txtLastName.Text,
                     txtBio.Text
-                );
+                ))
+            {
+                MessageBox.Show("Einstellungen gespeichert!", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Es gab einen Fehler in der Speicherung", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
-            MessageBox.Show("Einstellungen gespeichert!", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
