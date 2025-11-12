@@ -10,11 +10,13 @@
         WindowStyle="None"
         Background="Transparent"
         AllowsTransparency="True"
+        ResizeMode="CanResize"
+        MouseDown="Window_MouseDown"
         >
 
     <Border CornerRadius="10"
             BorderThickness="1"
-            Opacity="0.8"
+            Opacity="1"
             >
         <Border.BorderBrush>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -24,8 +26,213 @@
             </LinearGradientBrush>
         </Border.BorderBrush>
 
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
+                <GradientStop Color="{StaticResource primaryBackColor1}" Offset="0" />
+                <GradientStop Color="{StaticResource primaryBackColor2}" Offset="0.75" />
+            </LinearGradientBrush>
+        </Border.Background>
+
         <Grid>
-            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Main Content Area -->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header with Menu Button and Window Controls -->
+                <Grid Grid.Row="0" Margin="10,10,10,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="5"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="btnMenu"
+                            Grid.Column="0"
+                            Width="48"
+                            Height="48"
+                            BorderThickness="0"
+                            Background="Transparent"
+                            Cursor="Hand"
+                            Click="btnMenu_Click"
+                            HorizontalAlignment="Left">
+                        <Image Source="/Images/icons8-menü-48.png"
+                               Width="48"
+                               Height="48"/>
+                    </Button>
+
+                    <Button x:Name="btnMinimize"
+                            Grid.Column="2"
+                            BorderThickness="0"
+                            Content="-"
+                            Foreground="White"
+                            FontSize="16"
+                            FontFamily="Montserrat"
+                            Cursor="Hand"
+                            Click="btnMinimize_Click">
+
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#28AEED"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#278BEF"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="18" Height="18"
+                                        CornerRadius="9"
+                                        Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <Button x:Name="btnMaximize"
+                            Grid.Column="3"
+                            BorderThickness="0"
+                            Content="□"
+                            Foreground="White"
+                            FontSize="14"
+                            FontFamily="Montserrat"
+                            Cursor="Hand"
+                            Click="btnMaximize_Click">
+
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#462AD8"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#28AEED"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="18" Height="18"
+                                        CornerRadius="9"
+                                        Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <Button x:Name="btnClose"
+                            Grid.Column="4"
+                            BorderThickness="0"
+                            Content="X"
+                            Foreground="White"
+                            FontSize="12"
+                            FontFamily="Montserrat"
+                            Cursor="Hand"
+                            Click="btnClose_Click">
+
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#DA34AE"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#C62DAE"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="18" Height="18"
+                                        CornerRadius="9"
+                                        Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Grid>
+
+                <!-- Main Content (placeholder for cards/profiles) -->
+                <Grid Grid.Row="1" Margin="20,0,20,20">
+                    <!-- Hier kommen später die Profil-Karten hin -->
+                    <Image 
+                           Stretch="Uniform"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           />
+                            
+
+                </Grid>
+            </Grid>
+
+            <!-- Right Sidebar with Action Buttons -->
+            <StackPanel Grid.Column="1"
+                        Orientation="Vertical"
+                        Margin="10,20,20,20"
+                        VerticalAlignment="Center"
+                        Width="48">
+                
+                <!-- Profil Button -->
+                <Button x:Name="btnProfile"
+                        Width="48"
+                        Height="48"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Cursor="Hand"
+                        Margin="0,0,0,20"
+                        Click="btnProfile_Click">
+                    <Image Source="/Images/icons8-männlicher-benutzer-eingekreist-48.png"
+                           Width="48"
+                           Height="48"/>
+                </Button>
+
+                <!-- Like Button -->
+                <Button x:Name="btnLike"
+                        Width="48"
+                        Height="48"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Cursor="Hand"
+                        Margin="0,0,0,20"
+                        Click="btnLike_Click">
+                    <Image Source="/Images/icons8-gefällt-mir-48.png"
+                           Width="48"
+                           Height="48"/>
+                </Button>
+
+                <!-- Dislike Button -->
+                <Button x:Name="btnDislike"
+                        Width="48"
+                        Height="48"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Cursor="Hand"
+                        Click="btnDislike_Click">
+                    <Image Source="/Images/icons8-daumen-runter-48.png"
+                           Width="48"
+                           Height="48"/>
+                </Button>
+            </StackPanel>
+
         </Grid>
     </Border>
 </Window>

@@ -196,24 +196,47 @@
                                        FontFamily="Montserrat"
                                        Margin="0,0,0,5"/>
 
-                            <TextBox x:Name="txtStreet"
-                                     FontSize="13"
-                                     FontWeight="Medium"
-                                     FontFamily="Montserrat"
-                                     Foreground="White"
-                                     CaretBrush="LightGray"
-                                     BorderBrush="DarkGray"
-                                     BorderThickness="0,0,0,1"
-                                     Height="28"
-                                     VerticalContentAlignment="Center"
-                                     Margin="0,0,0,20"
-                                     Padding="25,0,0,0">
-                                <TextBox.Background>
-                                    <ImageBrush ImageSource="/Images/icons8-zuhause-48.png"
-                                                Stretch="Uniform"
-                                                AlignmentX="Left"/>
-                                </TextBox.Background>
-                            </TextBox>
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox x:Name="txtStreet"
+                                         Grid.Column="0"
+                                         FontSize="13"
+                                         FontWeight="Medium"
+                                         FontFamily="Montserrat"
+                                         Foreground="White"
+                                         CaretBrush="LightGray"
+                                         BorderBrush="DarkGray"
+                                         BorderThickness="0,0,0,1"
+                                         Height="28"
+                                         VerticalContentAlignment="Center"
+                                         Padding="25,0,0,0">
+                                    <TextBox.Background>
+                                        <ImageBrush ImageSource="/Images/icons8-zuhause-48.png"
+                                                    Stretch="Uniform"
+                                                    AlignmentX="Left"/>
+                                    </TextBox.Background>
+                                </TextBox>
+
+                                <TextBox x:Name="txtHouseNumber"
+                                         Grid.Column="2"
+                                         FontSize="13"
+                                         FontWeight="Medium"
+                                         FontFamily="Montserrat"
+                                         Foreground="White"
+                                         Background="Transparent"
+                                         CaretBrush="LightGray"
+                                         BorderBrush="DarkGray"
+                                         BorderThickness="0,0,0,1"
+                                         Height="28"
+                                         VerticalContentAlignment="Center"
+                                         Padding="5,0,0,0">
+                                </TextBox>
+                            </Grid>
 
                             <TextBlock Text="Stadt PLZ"
                                        Foreground="DarkGray"
@@ -222,24 +245,47 @@
                                        FontFamily="Montserrat"
                                        Margin="0,0,0,5"/>
 
-                            <TextBox x:Name="txtCity"
-                                     FontSize="13"
-                                     FontWeight="Medium"
-                                     FontFamily="Montserrat"
-                                     Foreground="White"
-                                     CaretBrush="LightGray"
-                                     BorderBrush="DarkGray"
-                                     BorderThickness="0,0,0,1"
-                                     Height="28"
-                                     VerticalContentAlignment="Center"
-                                     Margin="0,0,0,20"
-                                     Padding="25,0,0,0">
-                                <TextBox.Background>
-                                    <ImageBrush ImageSource="/Images/icons8-stadt-48.png"
-                                                Stretch="Uniform"
-                                                AlignmentX="Left"/>
-                                </TextBox.Background>
-                            </TextBox>
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox x:Name="txtCity"
+                                         Grid.Column="0"
+                                         FontSize="13"
+                                         FontWeight="Medium"
+                                         FontFamily="Montserrat"
+                                         Foreground="White"
+                                         CaretBrush="LightGray"
+                                         BorderBrush="DarkGray"
+                                         BorderThickness="0,0,0,1"
+                                         Height="28"
+                                         VerticalContentAlignment="Center"
+                                         Padding="25,0,0,0">
+                                    <TextBox.Background>
+                                        <ImageBrush ImageSource="/Images/icons8-stadt-48.png"
+                                                    Stretch="Uniform"
+                                                    AlignmentX="Left"/>
+                                    </TextBox.Background>
+                                </TextBox>
+
+                                <TextBox x:Name="txtPostalCode"
+                                        Grid.Column="2"
+                                        FontSize="13"
+                                        FontWeight="Medium"
+                                        FontFamily="Montserrat"
+                                        Foreground="White"
+                                        Background="Transparent"
+                                        CaretBrush="LightGray"
+                                        BorderBrush="DarkGray"
+                                        BorderThickness="0,0,0,1"
+                                        Height="28"
+                                        VerticalContentAlignment="Center"
+                                        Padding="5,0,0,0">
+                                </TextBox>
+                            </Grid>
                         </StackPanel>
 
                         <!-- Infos Section -->
@@ -554,9 +600,9 @@
                                         Margin="0,0,0,20">
                                 <Slider x:Name="sliderRadius"
                                         Minimum="0"
-                                        Maximum="1000"
-                                        Value="50"
-                                        TickFrequency="50"
+                                        Maximum="500"
+                                        Value="20"
+                                        TickFrequency="20"
                                         IsSnapToTickEnabled="True"
                                         Margin="0,0,0,10"/>
                                 

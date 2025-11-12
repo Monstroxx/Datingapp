@@ -23,5 +23,56 @@ namespace BananaLove.View
         {
             InitializeComponent();
         }
+
+        public void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+                DragMove();
+        }
+
+        private void btnMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void btnMaximize_Click(object sender, RoutedEventArgs e)
+        {
+            if (WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Normal;
+            }
+            else
+            {
+                WindowState = WindowState.Maximized;
+            }
+        }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btnMenu_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Implement menu functionality
+            // z.B. PreferenceView öffnen oder Sidebar-Menü anzeigen
+        }
+
+        private void btnProfile_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Implement profile view functionality
+            PreferenceView preferenceView = new PreferenceView();
+            preferenceView.Show();
+        }
+
+        private void btnLike_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Implement like functionality
+        }
+
+        private void btnDislike_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Implement dislike functionality
+        }
     }
 }
