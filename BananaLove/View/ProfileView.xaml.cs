@@ -17,7 +17,7 @@ namespace BananaLove.View
     /// <summary>
     /// Interaktionslogik für ProfileView.xaml
     /// </summary>
-    public partial class ProfileView : Window
+    public partial class ProfileView : WindowView
     {
         public ProfileView()
         {

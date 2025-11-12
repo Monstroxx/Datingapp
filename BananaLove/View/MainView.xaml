@@ -1,4 +1,4 @@
-﻿<Window x:Class="BananaLove.View.MainView"
+﻿<local:WindowView x:Class="BananaLove.View.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -266,4 +266,4 @@
 
         </Grid>
     </Border>
-</Window>
+</local:WindowView>

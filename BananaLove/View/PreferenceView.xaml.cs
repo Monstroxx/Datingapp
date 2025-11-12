@@ -19,12 +19,11 @@ namespace BananaLove.View
     /// <summary>
     /// Interaktionslogik für PreferenceView.xaml
     /// </summary>
-    public partial class PreferenceView : Window
+    public partial class PreferenceView : WindowView
     {
-        Login login;
-        public PreferenceView(Login login_data)
+        public PreferenceView(Login loginData) : base(loginData)
         {
-            login = login_data;
+            LoginData = loginData;
             InitializeComponent();
         }
 
@@ -143,7 +142,7 @@ namespace BananaLove.View
             }
 
             if (DBHandler.UpdateUserData(
-                    login.UserID,
+                    LoginData.UserID,
                     txtStreet.Text,
                     txtHouseNumber.Text,
                     txtCity.Text,
@@ -158,6 +157,7 @@ namespace BananaLove.View
                 ))
             {
                 MessageBox.Show("Einstellungen gespeichert!", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
+                ViewHandler.openMainWindow(true, this);
             }
             else
             {

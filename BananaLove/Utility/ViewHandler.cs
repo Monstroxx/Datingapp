@@ -12,31 +12,31 @@ namespace BananaLove.Utility
     {
         public static bool ViewDebug = true; 
 
-        public static void openMainWindow(bool close, LoginView currentView)
+        public static void openMainWindow(bool close, WindowView currentView)
         {
             MainView mainView = new MainView(currentView.LoginData);
             mainView.Show();
             if (close) { currentView.Close(); }
         }
-        public static void openPreferenceWindow(bool close, LoginView currentView)
+        public static void openPreferenceWindow(bool close, WindowView currentView)
         {
             PreferenceView preferenceView = new PreferenceView(currentView.LoginData);
             preferenceView.Show();
             if (close) { currentView.Close(); }
         }
-        public static void openProfileView(bool close, LoginView currentView)
+        public static void openProfileView(bool close, WindowView currentView)
         {
             ProfileView profileView = new ProfileView();
             profileView.Show();
             if (close) { currentView.Close(); }
         }
-        public static void openLoginView(bool close, LoginView currentView)
+        public static void openLoginView(bool close, WindowView currentView)
         {
             LoginView loginView = new LoginView();
             loginView.Show();
             if (close) { currentView.Close(); }
         }
-        public static void openeverything(LoginView currentView)
+        public static void openeverything(WindowView currentView)
         {
             if (ViewDebug == true)
             {

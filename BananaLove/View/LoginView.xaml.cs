@@ -19,7 +19,7 @@ namespace BananaLove.View
     /// <summary>
     /// Interaktionslogik für LoginView.xaml
     /// </summary>
-    public partial class LoginView : Window
+    public partial class LoginView : WindowView
     {
         public Login LoginData;
         public LoginView()
