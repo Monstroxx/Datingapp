@@ -26,28 +26,9 @@ namespace BananaLove.View
             InitializeComponent();
             EnvHandler.LoadEnvs("../../../.env");
             DBHandler.TestConnection();
-            if (DebugHandler.isDebugMode == true)
-            {
-                Debug.WriteLine("Debug Mode: Bypassing login.");
-                openMainWindow(false);
-                openSignupWindow(false);
-                return;
-            }
         }
 
-        public void openMainWindow(bool close)
-        {
-            MainView mainView = new MainView();
-            mainView.Show();
-            if (close) { this.Close(); }
-        }
-        public void openSignupWindow(bool close)
-        {
-            // PreferenceView öffnen
-            PreferenceView preferenceView = new PreferenceView();
-            preferenceView.Show();
-            if (close) { this.Close(); }
-        }
+
         public void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
