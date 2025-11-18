@@ -10,6 +10,8 @@ using System.Windows.Documents;
 using System.Net.Mail;
 using System.Printing;
 using System.Globalization;
+using System.Net.Http;
+using System.Text.Json;
 
 namespace BananaLove.Utility
 {
@@ -574,6 +576,34 @@ ORDER BY distance;                                    -- sortiert nach Entfernun
                 return false;
             }
         }
+        
+        public static async Task<(double lat, double lon)?> GetCoordsFromPlz(string plz)
+        {
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("MeineApp/1.0"); // Pflicht bei Nominatim
+
+            var url =
+                $"https://nominatim.openstreetmap.org/search?postalcode={plz}&country=Germany&format=json&limit=1";
+
+            var json = await client.GetStringAsync(url);
+            var result = JsonSerializer.Deserialize<List<NominatimResult>>(json);
+
+            if (result is null || result.Count == 0)
+                return null;
+
+            return (double.Parse(result[0].lat), double.Parse(result[0].lon));
+        }
+
+        public record NominatimResult(string lat, string lon);
     }
+    /*
+var coords = await GetCoordsFromPlz("10115");
+if (coords != null)
+{
+    var (lat, lon) = coords.Value;
+    // Weiterverarbeiten
+}
+
+     */
 
 }
