@@ -29,7 +29,9 @@ CREATE TABLE `Address` (
     `street` VARCHAR(45),
     `number` VARCHAR(10),
     `city` VARCHAR(45),
-    `postal` INT NOT NULL
+    `postal` INT NOT NULL,
+    `latitude` DECIMAL(9,6) NOT NULL,
+    `longitude` DECIMAL(9,6) NOT NULL
 )
 
 CREATE TABLE `Login` (
@@ -85,8 +87,8 @@ INSERT INTO `DatingApp`.`User` VALUES
     (2, "Testing", "Persona", "2003-07-23", "W", 2, 1);
 
 INSERT INTO `DatingApp`.`Address` VALUES
-    (1, "Hauptstraße", "5a", "Köln", 51385),
-    (2, "Nebenweg", "12", "Bonn", 52948);
+    (1, "Hauptstraße", "5a", "Köln", 51385, 50.937500, 6.960300),
+    (2, "Nebenweg", "12", "Bonn", 52948, 50.737400, 7.098200);
 
 INSERT INTO `DatingApp`.`Login` VALUES
     (1, 1, "test.person@example.com", "Password!"),

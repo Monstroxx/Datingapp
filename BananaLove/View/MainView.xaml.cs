@@ -21,11 +21,18 @@ namespace BananaLove.View
     /// </summary>
     public partial class MainView : WindowView
     {
+        List<string> searchResults = new List<string>();
         public MainView(Login login_data)
         {
             LoginData = login_data;
             if (LoginData == null) DebugHandler.LogError("[MainView] login_data is null! This may be bad!");
             InitializeComponent();
+            searchResults = DBHandler.get_prefference(LoginData.UserID);
+            DebugHandler.seperate();
+            foreach (var item in searchResults)
+            {
+                DebugHandler.Log(item);
+            }
         }
 
         public void Window_MouseDown(object sender, MouseButtonEventArgs e)

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Net.Mail;
 using System.Printing;
+using System.Globalization;
 
 namespace BananaLove.Utility
 {
@@ -391,7 +392,93 @@ namespace BananaLove.Utility
             }
             return (result);
         }
-        
+
+        public static List<string> get_prefference(long user_id)
+        {
+            // Diese Funktion liefert alle User zurück, die in den Suchpräferenzen
+            // (Geschlecht + Distanz-Radius) des Users mit der gegebenen user_id liegen.
+            //
+            // Rückgabe-Schema (List<string>):
+            // [ id1, gender1, distance1, id2, gender2, distance2, ... ]
+            //
+            // distanceN = Entfernung in Kilometern zwischen suchendem User (u1) und gefundenem User (u2).
+
+            var result = new List<string>();
+
+            using (var con = connect())
+            {
+                con.Open();
+
+                // SQL-Logik:
+                // - u1 ist der suchende User (mit @user_id)
+                // - u2 sind alle anderen User, deren Geschlecht zu u1s Preference (p.prefers) passt
+                // - a1/a2 sind die Adressen (mit lat/lon) von u1 bzw. u2
+                // - die Distanz wird über die Haversine-Formel berechnet (Erde ~ Kugel, Radius ca. 6371 km)
+                // - HAVING filtert alle User heraus, deren Distanz über dem Suchradius liegt
+                string query = @"
+SELECT 
+    u2.id AS target_user_id,
+    -- Haversine-Formel: Entfernung (in km) zwischen zwei GPS-Punkten
+    (6371 *
+        acos(
+            cos(radians(a1.latitude)) *
+            cos(radians(a2.latitude)) *
+            cos(radians(a2.longitude) - radians(a1.longitude)) +
+            sin(radians(a1.latitude)) *
+            sin(radians(a2.latitude))
+        )
+    ) AS distance,
+    p.search_radius,
+    u2.gender AS target_gender
+FROM `User` u1
+JOIN `Preference` p ON u1.preference_id = p.id       -- Suchpräferenzen des suchenden Users
+JOIN `User` u2 ON u2.gender = p.prefers              -- nur User, deren Geschlecht zur Preference passt
+JOIN `Profil` pr1 ON u1.profil_id = pr1.id
+JOIN `Profil` pr2 ON u2.profil_id = pr2.id
+JOIN `Address` a1 ON pr1.address_id = a1.id          -- Adresse (Koordinaten) des suchenden Users
+JOIN `Address` a2 ON pr2.address_id = a2.id          -- Adresse (Koordinaten) des anderen Users
+WHERE u1.id = @user_id
+  AND u2.id != @user_id                               -- sich selbst nicht matchen
+HAVING distance <= p.search_radius                    -- nur User innerhalb des Suchradius
+ORDER BY distance;                                    -- sortiert nach Entfernung (nächster zuerst)";
+
+                using (var cmd = new MySqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@user_id", user_id);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        DebugHandler.seperate();
+
+                        while (reader.Read())
+                        {
+                            long otherUserId = reader.GetInt64("target_user_id");
+                            double distance = reader.GetDouble("distance");
+                            int radius = reader.GetInt32("search_radius");
+                            string gender = reader.GetString("target_gender"); // "m", "w", "d"
+
+                            // distance ist bereits das Ergebnis der Haversine-Formel (siehe SQL oben)
+                            // und repräsentiert die Luftlinie in Kilometern zwischen den beiden Adressen.
+                            var de = new CultureInfo("de-DE");
+
+                            DebugHandler.Log(
+                                $"Found matching user: id={otherUserId}, gender={gender}, distance={distance.ToString("F2", de)}, radius={radius}"
+                            );
+
+                            // id, Geschlecht und Distanz als Strings zurückgeben (Tripel)
+                            result.Add(otherUserId.ToString());
+                            result.Add(gender);
+                            result.Add(distance.ToString(CultureInfo.InvariantCulture));
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
+
         public static Dictionary<string, object> GetUserData(long userId)
         {
             var result = new Dictionary<string, object>();
