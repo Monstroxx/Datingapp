@@ -24,6 +24,7 @@ namespace BananaLove.View
         public MainView(Login login_data)
         {
             LoginData = login_data;
+            if (LoginData == null) DebugHandler.LogError("[MainView] login_data is null! This may be bad!");
             InitializeComponent();
         }
 

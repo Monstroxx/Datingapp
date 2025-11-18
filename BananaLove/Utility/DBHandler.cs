@@ -464,6 +464,11 @@ namespace BananaLove.Utility
         {
             return new Login(-1, -1, error);
         }
+
+        public override string ToString()
+        {
+            return $"Login<UserID={UserID}, LoginID={LoginID}, State={State}>";
+        }
     }
 
 

@@ -21,7 +21,6 @@ namespace BananaLove.View
     /// </summary>
     public partial class LoginView : WindowView
     {
-        public Login LoginData;
         public LoginView()
         {
             InitializeComponent();

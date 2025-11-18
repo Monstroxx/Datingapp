@@ -25,6 +25,7 @@ namespace BananaLove.View
         {
             // Reihenfolge ist wichtig!
             LoginData = loginData;
+            if (LoginData == null) DebugHandler.LogError("[PrefView] LoginData is null! This may be bad!");
             InitializeComponent();
             LoadCurrentLogin();
         }
@@ -172,6 +173,9 @@ namespace BananaLove.View
         {
             try
             {
+                if (LoginData == null)
+                    DebugHandler.Log("Userdata is null");
+                DebugHandler.Log($"Userdata is {LoginData}");
                 var data = DBHandler.GetUserData(LoginData.UserID);
 
                 // Grunddaten
