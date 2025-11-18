@@ -106,14 +106,6 @@ namespace BananaLove.View
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Implement save functionality
-            // Get values:
-            // - txtStreet.Text
-            // - txtCity.Text
-            // - Selected gender from btnGenderFemale/Male/Other
-            // - dpBirthday.SelectedDate
-            // - Selected preference gender from btnPreferenceFemale/Male/Other
-            // - sliderRadius.Value
             string selectedGender = "";
             if (btnGenderFemale.IsChecked == true) { selectedGender = "w"; }
             else if (btnGenderMale.IsChecked == true) { selectedGender = "m"; }
@@ -128,7 +120,7 @@ namespace BananaLove.View
             try { postalCode = int.Parse(txtPostalCode.Text); }
             catch (Exception)
             {
-                MessageBox.Show("Bitte geben Sie eine gültige Postleitzahl ein.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                DebugHandler.LogError("Bitte geben Sie eine gültige Postleitzahl ein.");
                 return;
             }
 
@@ -140,7 +132,7 @@ namespace BananaLove.View
             }
             else
             {
-                MessageBox.Show("Bitte wählen Sie ein gültiges Geburtsdatum aus.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                DebugHandler.LogError("Bitte wählen Sie ein gültiges Geburtsdatum aus.");
                 return;
             }
 
@@ -159,12 +151,12 @@ namespace BananaLove.View
                     txtBio.Text
                 ))
             {
-                MessageBox.Show("Einstellungen gespeichert!", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
+                DebugHandler.Log("Einstellungen gespeichert!");
                 ViewHandler.openMainWindow(true, this);
             }
             else
             {
-                MessageBox.Show("Es gab einen Fehler in der Speicherung", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                DebugHandler.LogError("Es gab einen Fehler in der Speicherung");
             }
 
         }
@@ -211,7 +203,7 @@ namespace BananaLove.View
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Fehler beim Laden der Nutzerdaten: {ex.Message}", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                DebugHandler.LogError($"Fehler beim Laden der Nutzerdaten: {ex.Message}");
             }
         }
     }
