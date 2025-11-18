@@ -173,6 +173,7 @@ namespace BananaLove.View
                 // Grunddaten
                 txtFirstName.Text = data["firstname"].ToString();
                 txtLastName.Text = data["lastname"].ToString();
+                txtUserName.Text = data["user_name"].ToString();
                 txtBio.Text = data["bio"].ToString();
 
                 // Adresse
