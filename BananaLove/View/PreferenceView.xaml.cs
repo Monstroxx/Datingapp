@@ -106,6 +106,11 @@ namespace BananaLove.View
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            UpdateUserData();
+        }
+
+        private async void UpdateUserData()
+        {
             string selectedGender = "";
             if (btnGenderFemale.IsChecked == true) { selectedGender = "w"; }
             else if (btnGenderMale.IsChecked == true) { selectedGender = "m"; }
@@ -136,20 +141,22 @@ namespace BananaLove.View
                 return;
             }
 
-            if (DBHandler.UpdateUserData(
-                    LoginData.UserID,
-                    txtStreet.Text,
-                    txtHouseNumber.Text,
-                    txtCity.Text,
-                    postalCode,
-                    selectedGender,
-                    birthday,
-                    selectedPreferenceGender,
-                    (int)sliderRadius.Value,
-                    txtFirstName.Text,
-                    txtLastName.Text,
-                    txtBio.Text
-                ))
+            var updated = await DBHandler.UpdateUserData(
+                LoginData.UserID,
+                txtStreet.Text,
+                txtHouseNumber.Text,
+                txtCity.Text,
+                postalCode,
+                selectedGender,
+                birthday,
+                selectedPreferenceGender,
+                (int)sliderRadius.Value,
+                txtFirstName.Text,
+                txtLastName.Text,
+                txtBio.Text
+            );
+            
+            if (updated != null && updated == true)
             {
                 DebugHandler.Log("Einstellungen gespeichert!");
                 ViewHandler.openMainWindow(true, this);
@@ -158,7 +165,6 @@ namespace BananaLove.View
             {
                 DebugHandler.LogError("Es gab einen Fehler in der Speicherung");
             }
-
         }
 
         private void LoadCurrentLogin()

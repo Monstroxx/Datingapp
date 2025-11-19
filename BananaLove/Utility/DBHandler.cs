@@ -12,6 +12,7 @@ using System.Printing;
 using System.Globalization;
 using System.Net.Http;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace BananaLove.Utility
 {
@@ -178,13 +179,15 @@ namespace BananaLove.Utility
             {
                 // 1. Address
                 const string insertAddress = @"
-            INSERT INTO Address (street, number, city, postal)
-            VALUES (@street, @number, @city, @postal)";
+            INSERT INTO Address (street, number, city, postal, latitude, longitude)
+            VALUES (@street, @number, @city, @postal, @latitude, @longitude)";
                 var cmdAddress = new MySqlCommand(insertAddress, con, trans);
                 cmdAddress.Parameters.AddWithValue("@street", "Hauptstraße");
                 cmdAddress.Parameters.AddWithValue("@number", "1");
                 cmdAddress.Parameters.AddWithValue("@city", "Berlin");
                 cmdAddress.Parameters.AddWithValue("@postal", 10115);
+                cmdAddress.Parameters.AddWithValue("@latitude", 52.52);
+                cmdAddress.Parameters.AddWithValue("@longitude", 13.3);
                 cmdAddress.ExecuteNonQuery();
                 long addressId = cmdAddress.LastInsertedId;
 
@@ -262,7 +265,7 @@ namespace BananaLove.Utility
             }
         }
 
-        public static bool UpdateUserData(
+        public static async Task<bool?> UpdateUserData(
             long userId,
             string street,
             string houseNumber,
@@ -317,7 +320,7 @@ namespace BananaLove.Utility
                     // 2. Adresse updaten
                     const string updateAddress = @"
                 UPDATE Address 
-                SET street=@street, number=@number, city=@city, postal=@postal
+                SET street=@street, number=@number, city=@city, postal=@postal, latitude=@latitude, longitude=@longitude
                 WHERE id=@id";
                     var cmdAddress = new MySqlCommand(updateAddress, con, trans);
                     cmdAddress.Parameters.AddWithValue("@street", street);
@@ -325,6 +328,24 @@ namespace BananaLove.Utility
                     cmdAddress.Parameters.AddWithValue("@city", city);
                     cmdAddress.Parameters.AddWithValue("@postal", postal);
                     cmdAddress.Parameters.AddWithValue("@id", addressId);
+                    
+                    DebugHandler.Log($"Now update address...");
+                    var coords = await Utility.GetCoordsFromPlz("10115");
+                    // var coords = Utility.GetCoordsFromPlz(postal.ToString()).GetAwaiter().GetResult();
+                    DebugHandler.Log($"Got coords: {coords}");
+                    if (coords != null)
+                    {
+                        var (lat, lon) = coords.Value;
+                        cmdAddress.Parameters.AddWithValue("@latitude", lat);
+                        cmdAddress.Parameters.AddWithValue("@longitude", lon);
+                        DebugHandler.Log($"Updated Address (lat={lat}; lon={lon}).");
+                    }
+                    else
+                    {
+                        DebugHandler.LogError($"The coordinates provided are invalid. PLZ: {postal}");
+                        throw new KeyNotFoundException("lat and lon not found!");
+                    }
+
                     cmdAddress.ExecuteNonQuery();
 
                     // 3. Profil updaten
@@ -580,21 +601,27 @@ ORDER BY distance;                                    -- sortiert nach Entfernun
         public static async Task<(double lat, double lon)?> GetCoordsFromPlz(string plz)
         {
             using var client = new HttpClient();
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("MeineApp/1.0"); // Pflicht bei Nominatim
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("BananaLove/0.8");
 
-            var url =
-                $"https://nominatim.openstreetmap.org/search?postalcode={plz}&country=Germany&format=json&limit=1";
+            var url = $"https://nominatim.openstreetmap.org/search?postalcode={plz}&country=Germany&format=json&limit=1";
 
             var json = await client.GetStringAsync(url);
-            var result = JsonSerializer.Deserialize<List<NominatimResult>>(json);
+
+            var result = JsonSerializer.Deserialize<List<NominatimResult>>(json, 
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             if (result is null || result.Count == 0)
                 return null;
 
-            return (double.Parse(result[0].lat), double.Parse(result[0].lon));
+            return (
+                double.Parse(result[0].Lat, CultureInfo.InvariantCulture),
+                double.Parse(result[0].Lon, CultureInfo.InvariantCulture)
+            );
         }
 
-        public record NominatimResult(string lat, string lon);
+        public record NominatimResult(string Lat, string Lon);
+
+
     }
     /*
 var coords = await GetCoordsFromPlz("10115");
