@@ -15,6 +15,9 @@ namespace BananaLove.View
     /// </summary>
     public partial class ProfileListView : UserControl
     {
+        // Event, damit der Host (z.B. MainView) auf "Schließen" reagieren kann
+        public event EventHandler? CloseRequested;
+
         public class ProfileCard
         {
             public long UserId { get; set; }
@@ -32,6 +35,12 @@ namespace BananaLove.View
         public void LoadProfiles(List<ProfileCard> profiles)
         {
             itemsControlProfiles.ItemsSource = profiles;
+        }
+
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
+        {
+            // Signal an den Host senden
+            CloseRequested?.Invoke(this, EventArgs.Empty);
         }
 
         private void ProfileCard_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

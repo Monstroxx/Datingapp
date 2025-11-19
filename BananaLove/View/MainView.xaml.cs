@@ -27,12 +27,10 @@ namespace BananaLove.View
             LoginData = login_data;
             if (LoginData == null) DebugHandler.LogError("[MainView] login_data is null! This may be bad!");
             InitializeComponent();
+
+            // Für-dich-Vorschläge laden (zeigt FypView, immer ein User auf einmal)
             searchResults = DBHandler.get_prefference(LoginData.UserID);
-            DebugHandler.seperate();
-            foreach (var item in searchResults)
-            {
-                DebugHandler.Log(item);
-            }
+            LoadFypView(searchResults);
         }
 
         public void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -71,9 +69,9 @@ namespace BananaLove.View
 
         private void btnProfile_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Implement profile view functionality
-            PreferenceView preferenceView = new PreferenceView(LoginData);
-            preferenceView.Show();
+            //PreferenceView preferenceView = new PreferenceView(LoginData);
+            //preferenceView.Show();
+            ViewHandler.openPreferenceWindow(true, this);
         }
 
         private void btnLike_Click(object sender, RoutedEventArgs e)
@@ -112,6 +110,14 @@ namespace BananaLove.View
             // Erstelle ProfileListView
             ProfileListView profileListView = new ProfileListView();
 
+            // Bei Klick auf "Schließen" zur FYP-Ansicht zurückkehren
+            profileListView.CloseRequested += (s, e) =>
+            {
+                grid.Children.Clear();
+                // FYP wieder anzeigen
+                LoadFypView(this.searchResults);
+            };
+
             // Konvertiere die Suchergebnisse in ProfileCard-Objekte
             // searchResults enthält: [id1, username1, bio1, id2, username2, bio2, ...]
             List<ProfileListView.ProfileCard> profiles = new List<ProfileListView.ProfileCard>();
@@ -136,6 +142,27 @@ namespace BananaLove.View
 
             // Füge die View zum Grid hinzu
             grid.Children.Add(profileListView);
+        }
+
+        /// <summary>
+        /// Lädt die FypView mit den Vorschlags-Usern (immer ein User sichtbar, Navigation mit Pfeiltasten).
+        /// </summary>
+        private void LoadFypView(List<string> matches)
+        {
+            Grid grid = contentGrid;
+
+            if (grid == null)
+            {
+                DebugHandler.LogError("contentGrid not found in MainView (FypView).");
+                return;
+            }
+
+            grid.Children.Clear();
+
+            var fypView = new FypView();
+            fypView.LoadMatches(matches);
+
+            grid.Children.Add(fypView);
         }
     }
 }
