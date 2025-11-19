@@ -497,6 +497,7 @@ ORDER BY distance;                                    -- sortiert nach Entfernun
                 u.gender,
                 p.user_name, 
                 p.bio,
+                p.picture,
                 a.street, 
                 a.number, 
                 a.city, 
@@ -523,6 +524,7 @@ ORDER BY distance;                                    -- sortiert nach Entfernun
                     result["gender"] = reader["gender"]?.ToString() ?? "";
                     result["user_name"] = reader["user_name"]?.ToString() ?? "";
                     result["bio"] = reader["bio"]?.ToString() ?? "";
+                    result["picture"] = reader["picture"]?.ToString() ?? "";
                     result["street"] = reader["street"]?.ToString() ?? "";
                     result["number"] = reader["number"]?.ToString() ?? "";
                     result["city"] = reader["city"]?.ToString() ?? "";
