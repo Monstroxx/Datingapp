@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -24,7 +25,19 @@ namespace BananaLove.View
         public LoginView()
         {
             InitializeComponent();
-            EnvHandler.LoadEnvs("../../../.env");
+            // Im Debug-Build liegt .env typischerweise im Projektordner.
+            // im Release (publish) liegt sie neben der EXE.
+            // Wir versuchen zuerst die lokale .env im Ausführungsverzeichnis.
+            var baseDirEnv = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".env");
+            if (File.Exists(baseDirEnv))
+            {
+                EnvHandler.LoadEnvs(baseDirEnv);
+            }
+            else
+            {
+                // Fallback: alter relativer Pfad für Debug-Start aus Visual Studio
+                EnvHandler.LoadEnvs("../../../.env");
+            }
             DBHandler.TestConnection();
             ViewHandler.openeverything(this);
         }

@@ -28,6 +28,17 @@ jobs:
     - name: Publish application
       run: dotnet publish BananaLove/BananaLove.csproj --configuration Release --output ./publish --self-contained true --runtime win-x64
 
+    - name: Generate .env from GitHub secrets
+      run: |
+        cd publish
+        echo "DatabaseServerIP=${{ secrets.DATABASESERVERIP }}"          >> .env
+        echo "DatabaseServerPort=${{ secrets.DATABASESERVERPORT }}"      >> .env
+        echo "DatabaseName=${{ secrets.DATABASENAME }}"                  >> .env
+        echo "DatabaseServerProfilename=${{ secrets.DATABASESERVERPROFILENAME }}" >> .env
+        echo "DatabaseServerPassword=${{ secrets.DATABASESERVERPASSWORD }}"       >> .env
+        echo "ViewHandlerDebug=${{ secrets.VIEWHANDLERDEBUG }}"          >> .env
+        echo "DebugHandler=${{ secrets.DEBUGHANDLER }}"                  >> .env
+
     - name: Create ZIP archive
       run: |
         cd publish

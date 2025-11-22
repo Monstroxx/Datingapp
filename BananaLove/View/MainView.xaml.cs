@@ -69,8 +69,6 @@ namespace BananaLove.View
 
         private void btnProfile_Click(object sender, RoutedEventArgs e)
         {
-            //PreferenceView preferenceView = new PreferenceView(LoginData);
-            //preferenceView.Show();
             ViewHandler.openPreferenceWindow(true, this);
         }
 
