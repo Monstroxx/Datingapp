@@ -59,6 +59,38 @@ namespace BananaLove.View
             Application.Current.Shutdown();
         }
 
+        private void ResetPassword_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtMail.Text))
+            {
+                MessageBox.Show(
+                    "Bitte gib zuerst deine E-Mail-Adresse ein.",
+                    "Passwort zurücksetzen",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                return;
+            }
+
+            bool success = DBHandler.ResetPassword(txtMail.Text);
+
+            if (success)
+            {
+                MessageBox.Show(
+                    "Wenn ein Account mit dieser E-Mail existiert, wurde ein neues Passwort an diese Adresse gesendet.",
+                    "Passwort zurückgesetzt",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Das Passwort konnte nicht zurückgesetzt werden. Bitte überprüfe die E-Mail-Adresse oder versuche es später erneut.",
+                    "Passwort zurücksetzen fehlgeschlagen",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             LoginData = DBHandler.TryLogin(txtMail.Text, txtPass.Password);
