@@ -558,6 +558,119 @@ ORDER BY distance;                                    -- sortiert nach Entfernun
             return result;
         }
 
+        public static bool DeleteUser(Login login)
+        {
+            if (login == null || login.UserID <= 0)
+                return false;
+
+            long userId = login.UserID;
+
+            var con = connect();
+            con.Open();
+            var trans = con.BeginTransaction();
+
+            try
+            {
+                // 1. Login entfernen
+                var cmdLogin = new MySqlCommand(
+                    "DELETE FROM Login WHERE id = @loginId",
+                    con, trans
+                );
+                cmdLogin.Parameters.AddWithValue("@loginId", login.LoginID);
+                cmdLogin.ExecuteNonQuery();
+
+                // 2. Likes / Matches / Suggests / Interests
+                void Exec(string sql)
+                {
+                    var c = new MySqlCommand(sql, con, trans);
+                    c.Parameters.AddWithValue("@uid", userId);
+                    c.ExecuteNonQuery();
+                }
+
+                Exec("DELETE FROM Likes WHERE user_id = @uid OR liked = @uid");
+                Exec("DELETE FROM Matches WHERE first = @uid OR second = @uid");
+                Exec("DELETE FROM Suggests WHERE user_id = @uid OR suggestion = @uid");
+                Exec("DELETE FROM HasInterests WHERE user_id = @uid");
+
+                // 3. Profile + Address ID holen
+                long profileId = -1;
+                long addressId = -1;
+
+                var cmdProf = new MySqlCommand(
+                    "SELECT profil_id FROM User WHERE id = @uid",
+                    con, trans
+                );
+                cmdProf.Parameters.AddWithValue("@uid", userId);
+
+                var r = cmdProf.ExecuteReader();
+                if (r.Read())
+                    profileId = r.GetInt64("profil_id");
+                r.Close();
+
+                // 4. User löschen
+                var cmdUser = new MySqlCommand(
+                    "DELETE FROM User WHERE id = @uid",
+                    con, trans
+                );
+                cmdUser.Parameters.AddWithValue("@uid", userId);
+                cmdUser.ExecuteNonQuery();
+
+                // 5. Address-ID holen
+                if (profileId != -1)
+                {
+                    var cmdAddrId = new MySqlCommand(
+                        "SELECT address_id FROM Profil WHERE id = @pid",
+                        con, trans
+                    );
+                    cmdAddrId.Parameters.AddWithValue("@pid", profileId);
+
+                    var r2 = cmdAddrId.ExecuteReader();
+                    if (r2.Read())
+                        addressId = r2.GetInt64("address_id");
+                    r2.Close();
+
+                    // 6. Profil löschen
+                    var cmdP = new MySqlCommand(
+                        "DELETE FROM Profil WHERE id = @pid",
+                        con, trans
+                    );
+                    cmdP.Parameters.AddWithValue("@pid", profileId);
+                    cmdP.ExecuteNonQuery();
+                }
+
+                // 7. Adresse löschen
+                if (addressId != -1)
+                {
+                    var cmdA = new MySqlCommand(
+                        "DELETE FROM Address WHERE id = @aid",
+                        con, trans
+                    );
+                    cmdA.Parameters.AddWithValue("@aid", addressId);
+                    cmdA.ExecuteNonQuery();
+                }
+
+                trans.Commit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                try
+                {
+                    trans.Rollback();
+                }
+                catch
+                {
+                }
+
+                DebugHandler.LogError("DeleteUser(Login) ERROR: " + ex.Message);
+                return false;
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+
     }
 
     public class Login
