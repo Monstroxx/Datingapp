@@ -752,41 +752,80 @@
                     </StackPanel>
                 </ScrollViewer>
 
-                <!-- Save Button -->
-                <Button x:Name="btnSave"
-                        Grid.Row="2"
-                        BorderThickness="0"
-                        Content="Speichern"
-                        Foreground="White"
-                        FontSize="12"
-                        FontFamily="Montserrat"
-                        Cursor="Hand"
-                        HorizontalAlignment="Center"
-                        Margin="0,20,0,20"
-                        Click="btnSave_Click">
+                <!-- Save / Delete Buttons -->
+                <StackPanel Grid.Row="2"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0,20,0,20"
+                            >
+                    <!-- Account löschen -->
+                    <Button x:Name="btnDeleteAccount"
+                            BorderThickness="0"
+                            Content="Account löschen"
+                            Foreground="White"
+                            FontSize="12"
+                            FontFamily="Montserrat"
+                            Cursor="Hand"
+                            Margin="0,0,20,0"
+                            Click="btnDeleteAccount_Click">
 
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Background" Value="#462AD8"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#28AEED"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <!-- gleicher Stil wie Speichern, nur in Rot -->
+                                <Setter Property="Background" Value="#DA3434"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#C02020"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
 
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Width="150" Height="40"
-                                    CornerRadius="20"
-                                    Background="{TemplateBinding Background}">
-                                <ContentPresenter VerticalAlignment="Center"
-                                                  HorizontalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="150" Height="40"
+                                        CornerRadius="20"
+                                        Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <!-- Speichern -->
+                    <Button x:Name="btnSave"
+                            BorderThickness="0"
+                            Content="Speichern"
+                            Foreground="White"
+                            FontSize="12"
+                            FontFamily="Montserrat"
+                            Cursor="Hand"
+                            Click="btnSave_Click">
+
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#462AD8"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#28AEED"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="150" Height="40"
+                                        CornerRadius="20"
+                                        Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
 
             </Grid>
         </Border>

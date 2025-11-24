@@ -109,6 +109,21 @@ namespace BananaLove.View
             UpdateUserData();
         }
 
+        private void btnDeleteAccount_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show(
+                "Möchtest du deinen Account wirklich dauerhaft löschen?\nDieser Vorgang kann nicht rückgängig gemacht werden.",
+                "Account löschen",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                DebugHandler.Log("User confirmed account deletion.");
+                // TODO: Account und alle zugehörigen Daten aus der Datenbank löschen (User, Login, Profil, Address, Preference, Matches, Likes, etc.)
+            }
+        }
+
         private async void UpdateUserData()
         {
             string selectedGender = "";
