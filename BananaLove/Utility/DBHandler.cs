@@ -30,11 +30,11 @@ namespace BananaLove.Utility
 
         public static MySqlConnection connect()
         {
-            string server = Environment.GetEnvironmentVariable("DatabaseServerIP");
-            string port = Environment.GetEnvironmentVariable("DatabaseServerPort");
-            string user = Environment.GetEnvironmentVariable("DatabaseServerProfilename");
-            string password = Environment.GetEnvironmentVariable("DatabaseServerPassword");
-            string database = Environment.GetEnvironmentVariable("DatabaseName");
+            string server = Environment.GetEnvironmentVariable("DatabaseServerIP") + "";
+            string port = Environment.GetEnvironmentVariable("DatabaseServerPort") + "";
+            string user = Environment.GetEnvironmentVariable("DatabaseServerProfilename") + "";
+            string password = Environment.GetEnvironmentVariable("DatabaseServerPassword") + "";
+            string database = Environment.GetEnvironmentVariable("DatabaseName") + "";
 
             if (string.IsNullOrWhiteSpace(server) ||
                 string.IsNullOrWhiteSpace(port) ||
@@ -817,7 +817,7 @@ ORDER BY distance;                                    -- sortiert nach Entfernun
         public static async Task<(double lat, double lon)?> GetCoordsFromPlz(string plz)
         {
             var client = new HttpClient();
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("BananaLove/0.8");
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("BananaLove/0.8"); // Sagen, wer man ist. Damit API antwortet
 
             var url = $"https://nominatim.openstreetmap.org/search?postalcode={plz}&country=Germany&format=json&limit=1";
 
