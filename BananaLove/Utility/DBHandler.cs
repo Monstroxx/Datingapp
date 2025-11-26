@@ -433,7 +433,7 @@ namespace BananaLove.Utility
                     cmdAddress.Parameters.AddWithValue("@id", addressId);
                     
                     DebugHandler.Log($"Now update address...");
-                    var coords = await Utility.GetCoordsFromPlz("10115");
+                    var coords = await Utility.GetCoordsFromPlz(postal.ToString());
                     // var coords = Utility.GetCoordsFromPlz(postal.ToString()).GetAwaiter().GetResult();
                     DebugHandler.Log($"Got coords: {coords}");
                     if (coords != null)
