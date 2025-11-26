@@ -46,7 +46,7 @@ namespace BananaLove.View
 
         private void btnMaximize_Click(object sender, RoutedEventArgs e)
         {
-            if (WindowState == WindowState.Maximized)
+            if (WindowState == WindowState.Maximized) //einfache if und else
             {
                 WindowState = WindowState.Normal;
             }

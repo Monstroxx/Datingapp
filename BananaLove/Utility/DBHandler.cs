@@ -155,6 +155,8 @@ namespace BananaLove.Utility
         /// </summary>
         private static string GenerateRandomPassword(int length = 12)
         {
+            //byte ist eine von außen nicht auslesbare in dem Fall 12 byte lange Zeichenfolge.
+            //RandomNumberGenerator generiert nicht vorhersehbare Zahlen.
             const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@$?_-";
             var data = new byte[length];
             using (var rng = RandomNumberGenerator.Create())
@@ -171,7 +173,7 @@ namespace BananaLove.Utility
             return result.ToString();
         }
 
-        public static bool TestConnection()
+        public static bool TestConnection() //einfache try catch Methode um die Verbindung zur Datenbank zu testen
         {
             try
             {
