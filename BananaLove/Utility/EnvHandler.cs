@@ -16,7 +16,7 @@ namespace BananaLove.Utility
             if (!File.Exists(filePath))
                 throw new FileNotFoundException($"The file '{filePath}' does not exist.");
 
-            foreach (var line in File.ReadAllLines(filePath))
+            foreach (var line in File.ReadAllLines(filePath)) //einfache foreach Schleife
             {
                 if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#"))
                     continue; // Skip empty lines and comments
