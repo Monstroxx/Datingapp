@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Security.Cryptography;
 
 namespace BananaLove.Utility
 {
@@ -68,6 +69,106 @@ namespace BananaLove.Utility
 
             con.Close();
             return false;
+        }
+
+        /// <summary>
+        /// Setzt das Passwort für den gegebenen Login-Eintrag zurück, generiert
+        /// ein neues zufälliges Passwort, speichert es in der Datenbank und
+        /// verschickt es per E-Mail an den Nutzer.
+        /// </summary>
+        public static bool ResetPassword(string email)
+        {
+            DebugHandler.seperate();
+
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                DebugHandler.LogError("ResetPassword() called with empty email.");
+                return false;
+            }
+
+            if (!Utility.IsValidEmail(email))
+            {
+                DebugHandler.LogError("ResetPassword() called with invalid email format.");
+                return false;
+            }
+
+            using (var con = connect())
+            {
+                con.Open();
+
+                using (var trans = con.BeginTransaction())
+                {
+                    try
+                    {
+                        // Prüfen, ob es den Login gibt
+                        const string selectLogin = @"SELECT id, user_id, email FROM Login WHERE email = @email";
+                        var cmdSelect = new MySqlCommand(selectLogin, con, trans);
+                        cmdSelect.Parameters.AddWithValue("@email", email);
+
+                        long loginId = -1;
+                        long userId = -1;
+
+                        using (var reader = cmdSelect.ExecuteReader())
+                        {
+                            if (!reader.Read())
+                            {
+                                DebugHandler.LogError($"ResetPassword(): Kein Login mit Email {email} gefunden.");
+                                return false;
+                            }
+
+                            loginId = reader.GetInt64("id");
+                            userId = reader.GetInt64("user_id");
+                        }
+
+                        // Neues Passwort generieren
+                        string newPassword = GenerateRandomPassword(12);
+
+                        // Passwort in der Datenbank aktualisieren (aktuell noch im Klartext, wie beim normalen Login)
+                        const string updateLogin = @"UPDATE Login SET password = @password WHERE id = @loginId";
+                        var cmdUpdate = new MySqlCommand(updateLogin, con, trans);
+                        cmdUpdate.Parameters.AddWithValue("@password", newPassword);
+                        cmdUpdate.Parameters.AddWithValue("@loginId", loginId);
+                        cmdUpdate.ExecuteNonQuery();
+
+                        trans.Commit();
+
+                        DebugHandler.Log($"ResetPassword(): Passwort für user_id={userId} (login_id={loginId}) zurückgesetzt.");
+
+                        // E-Mail mit neuem Passwort senden (Fehler beim Senden sollen die DB-Änderung nicht zurückrollen)
+                        MailSender.SendPasswordResetMail(email, newPassword);
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        try { trans.Rollback(); } catch { }
+                        DebugHandler.LogError($"ResetPassword() DB-Error: {ex.Message}");
+                        return false;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Generiert ein zufälliges Passwort mit der angegebenen Länge.
+        /// Enthält Groß-/Kleinbuchstaben, Ziffern und einige Sonderzeichen.
+        /// </summary>
+        private static string GenerateRandomPassword(int length = 12)
+        {
+            const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@$?_-";
+            var data = new byte[length];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(data);
+            }
+
+            var result = new StringBuilder(length);
+            foreach (var b in data)
+            {
+                result.Append(chars[b % chars.Length]);
+            }
+
+            return result.ToString();
         }
 
         public static bool TestConnection()
