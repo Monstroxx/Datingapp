@@ -121,6 +121,13 @@ namespace BananaLove.View
             {
                 DebugHandler.Log("User confirmed account deletion.");
                 // TODO: Account und alle zugehörigen Daten aus der Datenbank löschen (User, Login, Profil, Address, Preference, Matches, Likes, etc.)
+                bool done =DBHandler.DeleteUser(LoginData);
+                if (done)
+                {
+                    MessageBox.Show("Konto wurde gelöscht! \nBitte starte die Anwendung neu!");
+                    Close();
+                }
+                else MessageBox.Show("Konto konnte nicht gelöscht werden!");
             }
         }
 

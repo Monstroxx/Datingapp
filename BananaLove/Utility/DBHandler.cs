@@ -700,7 +700,7 @@ ORDER BY distance;                                    -- sortiert nach Entfernun
 
     public static class Utility
     {
-        public static bool IsValidEmail(string email)
+        public static bool IsValidEmail(string email) // Einfache try and catch Anwendung
         {
             try
             {
@@ -715,7 +715,7 @@ ORDER BY distance;                                    -- sortiert nach Entfernun
         
         public static async Task<(double lat, double lon)?> GetCoordsFromPlz(string plz)
         {
-            using var client = new HttpClient();
+            var client = new HttpClient();
             client.DefaultRequestHeaders.UserAgent.ParseAdd("BananaLove/0.8");
 
             var url = $"https://nominatim.openstreetmap.org/search?postalcode={plz}&country=Germany&format=json&limit=1";
@@ -738,14 +738,4 @@ ORDER BY distance;                                    -- sortiert nach Entfernun
 
 
     }
-    /*
-var coords = await GetCoordsFromPlz("10115");
-if (coords != null)
-{
-    var (lat, lon) = coords.Value;
-    // Weiterverarbeiten
-}
-
-     */
-
 }
